@@ -2,6 +2,7 @@ export interface ItemsModel {
     _id: string;
     code: string;
     name: string;
+    model: string;
     brand: string;
     description: string;
     category: string;

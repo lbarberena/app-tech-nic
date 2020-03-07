@@ -14,7 +14,7 @@ const routes: Routes = [
           {
             path: '',
             loadChildren: () =>
-              import('../tab1/tab1.module').then(m => m.Tab1PageModule)
+              import('../billing/tab1.module').then(m => m.Tab1PageModule)
           }
         ],
         canActivate: [AuthGuardService]
@@ -25,7 +25,7 @@ const routes: Routes = [
           {
             path: '',
             loadChildren: () =>
-              import('../tab2/tab2.module').then(m => m.Tab2PageModule)
+              import('../inventory/items/tab2.module').then(m => m.Tab2PageModule)
           }
         ],
         canActivate: [AuthGuardService]
@@ -36,7 +36,7 @@ const routes: Routes = [
           {
             path: '',
             loadChildren: () =>
-              import('../tab3/tab3.module').then(m => m.Tab3PageModule)
+              import('../accountings/tab3.module').then(m => m.Tab3PageModule)
           }
         ],
         canActivate: [AuthGuardService]

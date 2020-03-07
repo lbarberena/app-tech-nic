@@ -1,0 +1,78 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-back-button></ion-back-button>
+        </ion-buttons>
+        <ion-title>{{ title }}</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+    <form [formGroup]="newItem">
+        <ion-item>
+            <ion-label position="floating">Código</ion-label>
+            <ion-input type="text" formControlName="code"></ion-input>
+        </ion-item>
+
+        <ion-item>
+            <ion-label position="floating">Nombre</ion-label>
+            <ion-input type="text" formControlName="name"></ion-input>
+        </ion-item>
+
+        <ion-item>
+            <ion-label position="floating">Marca</ion-label>
+            <ion-input type="text" formControlName="brand"></ion-input>
+        </ion-item>
+
+        <ion-item>
+            <ion-label position="floating">Modelo</ion-label>
+            <ion-input type="text" formControlName="model"></ion-input>
+        </ion-item>
+
+        <ion-item>
+            <ion-label position="floating">Descripción</ion-label>
+            <ion-input type="text" formControlName="description"></ion-input>
+        </ion-item>
+
+        <ion-item>
+            <ion-label position="floating">Categoría</ion-label>
+            <ion-select placeholder="Selecciona una..." formControlName="category">
+                <ion-select-option *ngFor="let c of categories">{{ c.categoryName }}</ion-select-option>
+            </ion-select>
+        </ion-item>
+
+        <ion-item>
+            <ion-label position="floating">Color</ion-label>
+            <ion-input type="text" formControlName="color"></ion-input>
+        </ion-item>
+
+        <ion-item>
+            <ion-label position="floating">Catidad</ion-label>
+            <ion-input type="number" formControlName="quantity"></ion-input>
+        </ion-item>
+
+        <ion-item>
+            <ion-label position="floating">Costo Unitario</ion-label>
+            <ion-input type="text" formControlName="unitCost"></ion-input>
+        </ion-item>
+
+        <ion-item>
+            <ion-label position="floating">Precio</ion-label>
+            <ion-input type="text" formControlName="price"></ion-input>
+        </ion-item>
+
+        <ion-item>
+            <ion-label position="floating">Tienda</ion-label>
+            <ion-input type="text" formControlName="store"></ion-input>
+        </ion-item>
+
+        <ion-item>
+            <ion-label position="floating">Fecha ingreso</ion-label>
+            <ion-input type="date" formControlName="createDate"></ion-input>
+        </ion-item>
+
+        <ion-button expand="full" type="submit" [disabled]="!newItem.valid" (click)="SAVE()">Guardar</ion-button>
+    </form>
+
+</ion-content>

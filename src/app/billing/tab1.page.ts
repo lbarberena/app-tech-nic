@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { BillsModel } from '../helpers/models/bills.model';
 import { BillsService } from '../services/bills.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-tab1',
@@ -11,7 +12,8 @@ export class Tab1Page implements OnInit {
   bills: BillsModel[];
   loading = false;
 
-  constructor( private billsService: BillsService ) {}
+  constructor( private billsService: BillsService,
+               private router: Router ) {}
 
   ngOnInit() {
     this.loading = true;
@@ -19,7 +21,7 @@ export class Tab1Page implements OnInit {
   }
 
   newBill() {
-
+    this.router.navigateByUrl(`/bill`);
   }
 
   GET() {
@@ -31,7 +33,11 @@ export class Tab1Page implements OnInit {
   }
 
   edit( billId: string ) {
-    
+    this.router.navigateByUrl(`/bill/${ billId }`);
+  }
+
+  erease( billId: string ) {
+
   }
 
 }

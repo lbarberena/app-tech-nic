@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-tabs',
@@ -8,13 +9,29 @@ import { Router } from '@angular/router';
 })
 export class TabsPage {
 
-  constructor(private router: Router) {}
+  constructor( private router: Router,
+               private alertCtrl: AlertController ) {}
 
-  logout() {
-    localStorage.removeItem('auth-token');
-    localStorage.removeItem('user');
-    localStorage.removeItem('role');
-    this.router.navigateByUrl('/authentication');
+  async logout() {
+    const alert = await this.alertCtrl.create({
+      header: '¿Seguro quieres salir?',
+      buttons: [
+        {
+          text: 'Salir',
+          handler: ( data ) => {
+            localStorage.removeItem('auth-token');
+            localStorage.removeItem('user');
+            localStorage.removeItem('role');
+            this.router.navigateByUrl('/authentication');
+          }
+        },
+        {
+          text: 'Cancelar',
+          role: 'cancel'
+        }
+      ]
+    });
+    alert.present();
   }
 
 }
