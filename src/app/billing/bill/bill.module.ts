@@ -8,6 +8,7 @@ import { BillPageRoutingModule } from './bill-routing.module';
 
 import { BillPage } from './bill.page';
 import { ReactiveFormsModule } from '@angular/forms';
+import { ProductsModalPageModule } from 'src/app/products-modal/products-modal.module';
 
 @NgModule({
   imports: [
@@ -15,7 +16,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     FormsModule,
     IonicModule,
     BillPageRoutingModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    ProductsModalPageModule
   ],
   declarations: [BillPage]
 })

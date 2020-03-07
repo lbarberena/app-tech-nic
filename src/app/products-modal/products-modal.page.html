@@ -1,0 +1,35 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-title>Seleccione Producto</ion-title>
+        <ion-buttons slot="end">
+            <ion-button (click)="closeModal()">
+                <ion-icon slot="icon-only" name="close"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+    <ion-list>
+        <ion-item *ngFor="let i of items" (click)="dismiss( i )">
+            <ion-grid>
+                <ion-row>
+                    <ion-col>
+                        <ion-label>Código: {{ i.code }}</ion-label>
+                    </ion-col>
+                    <ion-col>
+                        <ion-label>Nombre: {{ i.name }}</ion-label>
+                    </ion-col>
+                    <ion-col>
+                        <ion-label>Color: {{ i.color }}</ion-label>
+                    </ion-col>
+                    <ion-col>
+                        <ion-label>Descripción: {{ i.description }}</ion-label>
+                    </ion-col>
+                </ion-row>
+            </ion-grid>
+        </ion-item>
+    </ion-list>
+
+</ion-content>

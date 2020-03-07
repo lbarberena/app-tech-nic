@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { BillsModel } from '../helpers/models/bills.model';
 import { BillsService } from '../services/bills.service';
 import { Router } from '@angular/router';
+import { ToastController, AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-tab1',
@@ -13,7 +14,9 @@ export class Tab1Page implements OnInit {
   loading = false;
 
   constructor( private billsService: BillsService,
-               private router: Router ) {}
+               private router: Router,
+               public toastController: ToastController,
+               private alertCtrl: AlertController ) {}
 
   ngOnInit() {
     this.loading = true;
@@ -36,8 +39,38 @@ export class Tab1Page implements OnInit {
     this.router.navigateByUrl(`/bill/${ billId }`);
   }
 
-  erease( billId: string ) {
-
+  async erease( billId: string ) {
+    const alert = await this.alertCtrl.create({
+      header: '¿Seguro quieres eliminar?',
+      buttons: [
+        {
+          text: 'Confirmar',
+          handler: ( data ) => {
+            this.billsService.DELETE( billId ).subscribe( async res => {
+              if ( res.success ) {
+                const TOAST = await this.toastController.create({
+                  duration: 3,
+                  message: res.msj
+                });
+                TOAST.present();
+                this.GET();
+              } else {
+                const TOAST = await this.toastController.create({
+                  duration: 3,
+                  message: res.msj
+                });
+                TOAST.present();
+              }
+            });
+          }
+        },
+        {
+          text: 'Cancelar',
+          role: 'cancel'
+        }
+      ]
+    });
+    alert.present();
   }
 
 }

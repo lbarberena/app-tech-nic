@@ -34,6 +34,10 @@ const routes: Routes = [
   {
     path: 'bill/:id',
     loadChildren: () => import('./billing/bill/bill.module').then( m => m.BillPageModule)
+  },
+  {
+    path: 'products-modal',
+    loadChildren: () => import('./products-modal/products-modal.module').then( m => m.ProductsModalPageModule)
   }
 ];
 @NgModule({

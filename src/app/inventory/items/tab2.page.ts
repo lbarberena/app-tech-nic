@@ -12,14 +12,12 @@ import { AlertController } from '@ionic/angular';
 export class Tab2Page implements OnInit {
 
   items: ItemsModel[];
-  loading = false;
 
   constructor( private router: Router,
                private itemsService: ItemsService,
                private alertCtrl: AlertController ) {}
 
   ngOnInit() {
-    this.loading = true;
     this.GET();
   }
 
@@ -27,7 +25,6 @@ export class Tab2Page implements OnInit {
     await this.itemsService.GET().subscribe( async res => {
       const itemsCollection: ItemsModel[] = (await res.data);
       this.items = itemsCollection;
-      this.loading = false;
     });
   }
 
@@ -58,6 +55,16 @@ export class Tab2Page implements OnInit {
 
   edit( itemId: string ) {
     this.router.navigateByUrl(`/admin-items/${ itemId }`);
+  }
+
+  doRefresh(event) {
+    setTimeout(() => {
+      event.target.complete();
+    }, 2000);
+  }
+
+  erease( id ) {
+    
   }
 
 }

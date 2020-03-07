@@ -4,7 +4,8 @@ import { BillsService } from 'src/app/services/bills.service';
 import { ItemsModel } from 'src/app/helpers/models/items.model';
 import { ItemsService } from 'src/app/services/items.service';
 import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
-import { ToastController, AlertController } from '@ionic/angular';
+import { ToastController, AlertController, ModalController } from '@ionic/angular';
+import { ProductsModalPage } from 'src/app/products-modal/products-modal.page';
 
 @Component({
   selector: 'app-bill',
@@ -18,6 +19,7 @@ export class BillPage implements OnInit {
   items: ItemsModel[];
   billForm: FormGroup;
   products = [];
+  public productData;
   actualMonth = new Date().getUTCMonth() + 1;
   productQuantity: number;
   productListForm: FormGroup;
@@ -26,12 +28,14 @@ export class BillPage implements OnInit {
                private formBuilder: FormBuilder,
                private billService: BillsService,
                public toastController: ToastController,
-               private alertCtrl: AlertController ) { }
+               private alertCtrl: AlertController,
+               public modalController: ModalController ) { }
 
   ngOnInit() {
     this.ID = this.route.snapshot.paramMap.get('id');
     if ( this.ID ) {
       this.title = 'Editar Factura';
+      this.GetBillById(this.ID);
     } else {
       this.title = 'Nueva Factura';
     }
@@ -42,7 +46,7 @@ export class BillPage implements OnInit {
       taxes: [''],
       subTotal: ['', Validators.required],
       total: ['', Validators.required],
-      Date: ['', Validators.required],
+      Date: [''],
       month: [this.actualMonth]
     });
 
@@ -87,6 +91,25 @@ export class BillPage implements OnInit {
     await this.itemsService.GET().subscribe( async res => {
       const itemsCollection: ItemsModel[] = (await res.data);
       this.items = itemsCollection;
+    });
+  }
+
+  SAVE() {
+    const bill = this.billForm.value;
+    this.billService.POST( bill ).subscribe( async res => {
+      if ( res.success ) {
+        const TOAST = await this.toastController.create({
+          duration: 3,
+          message: res.msj
+        });
+        TOAST.present();
+      } else {
+        const TOAST = await this.toastController.create({
+          duration: 3,
+          message: res.msj
+        });
+        TOAST.present();
+      }
     });
   }
 
@@ -150,15 +173,13 @@ export class BillPage implements OnInit {
 
   }
 
-  saveProductId( id: string ) {
-    localStorage.setItem('ProductId', id);
-  }
-
   GetProductsById() {
-    const id = localStorage.getItem('ProductId');
+    // const id = localStorage.getItem('ProductId');
 
-    if ( id ) {
-      this.itemsService.GetByID( id ).subscribe( async res => {
+    const data = this.productData;
+
+    if ( data ) {
+      this.itemsService.GetByID( data._id ).subscribe( async res => {
         this.productQuantity = res.data.quantity;
         if ( res.data.quantity > 0 ) {
           this.billForm.patchValue({
@@ -167,7 +188,7 @@ export class BillPage implements OnInit {
             quantity: 1,
             unitCost: res.data.unitCost
           });
-          this.addProducts(id, res.data._id, res.data.name, 1, res.data.unitCost, res.data.price);
+          this.addProducts(data._id, res.data._id, res.data.name, 1, res.data.unitCost, res.data.price);
         } else {
           const TOAST = await this.toastController.create({
             duration: 3,
@@ -196,6 +217,18 @@ export class BillPage implements OnInit {
 
     });
 
+}
+
+async presentModal() {
+  const modal = await this.modalController.create({
+    component: ProductsModalPage
+  });
+
+  modal.onDidDismiss().then( (data) => {
+    this.productData = data.data.data;
+    this.GetProductsById();
+  });
+  return await modal.present();
 }
 
 }
