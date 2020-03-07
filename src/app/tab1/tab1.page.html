@@ -1,17 +1,33 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Tab 1
-    </ion-title>
-  </ion-toolbar>
+<ion-header [translucent]="true" collapse="condense">
+    <ion-toolbar>
+        <ion-title size="large">
+            Facturación
+        </ion-title>
+    </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 1</ion-title>
-    </ion-toolbar>
-  </ion-header>
 
-  <app-explore-container name="Tab 1 page"></app-explore-container>
+    <ion-list>
+        <ion-item *ngFor="let b of bills" (click)="edit( b._id )">
+            <ion-row>
+                <ion-col>
+                    <ion-label>Código: {{ b.code }}</ion-label>
+                </ion-col>
+                <ion-col>
+                    <ion-label>Fecha: {{ b.Date | date:'medium' }}</ion-label>
+                </ion-col>
+                <ion-col>
+                    <ion-label>total: C${{ b.total | number:'1.1-2' }}</ion-label>
+                </ion-col>
+            </ion-row>
+        </ion-item>
+    </ion-list>
+
+    <ion-fab (click)="newBill()" vertical="bottom" horizontal="end" slot="fixed">
+        <ion-fab-button>
+            <ion-icon name="add"></ion-icon>
+        </ion-fab-button>
+    </ion-fab>
+
 </ion-content>

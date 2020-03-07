@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-tabs',
@@ -7,6 +8,13 @@ import { Component } from '@angular/core';
 })
 export class TabsPage {
 
-  constructor() {}
+  constructor(private router: Router) {}
+
+  logout() {
+    localStorage.removeItem('auth-token');
+    localStorage.removeItem('user');
+    localStorage.removeItem('role');
+    this.router.navigateByUrl('/authentication');
+  }
 
 }
