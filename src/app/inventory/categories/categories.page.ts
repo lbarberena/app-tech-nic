@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { CategoriesService } from 'src/app/services/categories.service';
 import { CategoriesModel } from 'src/app/helpers/models/categories.model';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { ToastController } from '@ionic/angular';
 
 @Component({
@@ -12,13 +12,23 @@ import { ToastController } from '@ionic/angular';
 })
 export class CategoriesPage implements OnInit {
 
+  ID: string;
+  title = '';
   newCategory: FormGroup;
   constructor( private router: Router,
+               private route: ActivatedRoute,
                private formBuilder: FormBuilder,
                private categoriesService: CategoriesService,
                public toastController: ToastController ) { }
 
   ngOnInit() {
+    this.ID = this.route.snapshot.paramMap.get('id');
+    if ( this.ID ) {
+      this.title = 'Editar Categoría';
+      this.GetById(this.ID);
+    } else {
+      this.title = 'Nueva Categoría';
+    }
     this.newCategory = this.formBuilder.group({
       categoryName: ['', Validators.required],
       description: ['']
@@ -27,6 +37,15 @@ export class CategoriesPage implements OnInit {
 
   cancel() {
     this.router.navigateByUrl('/tabs/items');
+  }
+
+  GetById( id: string) {
+    this.categoriesService.GetByID( id ).subscribe( async res => {
+      this.newCategory.patchValue({
+        categoryName: res.data.categoryName,
+        description: res.data.description
+      });
+    });
   }
 
   async SAVE() {

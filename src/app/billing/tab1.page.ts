@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { ToastController, AlertController } from '@ionic/angular';
 
 import { BillsService } from '../services/bills.service';
+import { ItemsService } from '../services/items.service';
 import { BillsModel } from '../helpers/models/bills.model';
 
 @Component({
@@ -13,16 +14,22 @@ import { BillsModel } from '../helpers/models/bills.model';
 })
 export class Tab1Page implements OnInit {
   bills: BillsModel[];
-  loading = false;
+  myBills = [];
+  products = [];
+  showAll = false;
+  showMines = false;
+  username = '';
+  searchBillsInput;
 
   constructor( private billsService: BillsService,
                private router: Router,
                public toastController: ToastController,
-               private alertCtrl: AlertController ) {}
+               private alertCtrl: AlertController,
+               private itemsService: ItemsService ) {}
 
   @ViewChild('slidingList', {static: true}) slidingList;
   ngOnInit() {
-    this.loading = true;
+    this.username = localStorage.getItem('user');
     this.GET();
   }
 
@@ -34,7 +41,12 @@ export class Tab1Page implements OnInit {
     this.billsService.GET().subscribe( async res => {
       const billsCollection: BillsModel[] = (await res.data);
       this.bills = billsCollection;
-      this.loading = false;
+
+      this.bills.forEach( e => {
+        if ( e.username === this.username ) {
+          this.myBills.push( e );
+        }
+      });
     });
   }
 
@@ -50,20 +62,46 @@ export class Tab1Page implements OnInit {
         {
           text: 'Confirmar',
           handler: ( data ) => {
-            this.billsService.DELETE( billId ).subscribe( async res => {
-              if ( res.success ) {
-                const TOAST = await this.toastController.create({
-                  duration: 3,
-                  message: res.msj
+            let Quantity = 0;
+            this.billsService.GetByID( billId ).subscribe( b => {
+
+              if ( b.success ) {
+                this.products = b.data.products;
+
+                this.products.forEach( res => {
+
+                  this.itemsService.GetByID( res._id ).subscribe( async item => {
+
+                    if ( res._id === item.data._id ) {
+
+                      Quantity = item.data.quantity + 1;
+
+                      this.itemsService.PUT(item.data._id, {
+                        quantity: Quantity
+                      }).subscribe( r => {
+                        this.billsService.DELETE( billId ).subscribe( async d => {
+                          if ( d.success ) {
+                            const TOAST = await this.toastController.create({
+                              duration: 3,
+                              message: d.msj
+                            });
+                            TOAST.present();
+                            this.GET();
+                          } else {
+                            const TOAST = await this.toastController.create({
+                              duration: 3,
+                              message: d.msj
+                            });
+                            TOAST.present();
+                          }
+                        });
+                      });
+
+                    }
+
+                  });
+
                 });
-                TOAST.present();
-                this.GET();
-              } else {
-                const TOAST = await this.toastController.create({
-                  duration: 3,
-                  message: res.msj
-                });
-                TOAST.present();
               }
             });
           }
@@ -81,6 +119,16 @@ export class Tab1Page implements OnInit {
     setTimeout(() => {
       event.target.complete();
     }, 2000);
+  }
+
+  segmentChanged(ev: any) {
+    if ( ev.detail.value === 'all' ) {
+      this.showAll = true;
+      this.showMines = false;
+    } else if ( ev.detail.value === 'mines' ) {
+      this.showAll = false;
+      this.showMines = true;
+    }
   }
 
 }

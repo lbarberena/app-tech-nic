@@ -5,11 +5,12 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
+    <ion-searchbar [(ngModel)]="searchItemsInput" [ngModelOptions]="{standalone: true}" placeholder="Buscar por nombre o código"></ion-searchbar>
     <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
         <ion-refresher-content></ion-refresher-content>
     </ion-refresher>
     <ion-list #slidingList>
-        <ion-item-sliding *ngFor="let i of items">
+        <ion-item-sliding *ngFor="let i of items | itemsFilter: searchItemsInput">
             <ion-item>
                 <ion-grid>
                     <ion-row>
@@ -26,13 +27,13 @@
                 </ion-grid>
             </ion-item>
 
-            <ion-item-options side="start">
+            <ion-item-options *ngIf="admin" side="start">
                 <ion-item-option (click)="edit( i._id )" color="tertiary">
                     <ion-icon name="create" slot="icon-only"></ion-icon>
                 </ion-item-option>
             </ion-item-options>
 
-            <ion-item-options side="end">
+            <ion-item-options *ngIf="admin" side="end">
                 <ion-item-option (click)="erease( i._id )" color="danger">
                     <ion-icon name="close" slot="icon-only"></ion-icon>
                 </ion-item-option>
@@ -40,10 +41,21 @@
         </ion-item-sliding>
     </ion-list>
 
-
-    <ion-fab (click)="newProduct()" vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab *ngIf="admin" vertical="bottom" horizontal="end" slot="fixed">
         <ion-fab-button>
             <ion-icon name="add"></ion-icon>
         </ion-fab-button>
+        <ion-fab-list side="top">
+            <ion-fab-button (click)="newProduct()">
+                <ion-icon name="cube-outline"></ion-icon>
+            </ion-fab-button>
+            <ion-fab-button (click)="newCategory()">
+                <ion-icon name="document-text-outline"></ion-icon>
+            </ion-fab-button>
+            <ion-fab-button (click)="listCategories()">
+                <ion-icon name="filter-outline"></ion-icon>
+            </ion-fab-button>
+        </ion-fab-list>
+
     </ion-fab>
 </ion-content>

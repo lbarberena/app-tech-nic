@@ -23,18 +23,27 @@ export class BillPage implements OnInit {
   products = [];
   public productData;
   actualMonth = new Date().getUTCMonth() + 1;
+  actualDate = new Date();
   productQuantity: number;
   productListForm: FormGroup;
   username: string;
   role: string;
   userId: string;
+  data = [{
+    _id: '',
+    productName: '',
+    quantity: 0,
+    unitCost: 0,
+    price: 0
+  }];
   constructor( private route: ActivatedRoute,
                private itemsService: ItemsService,
                private formBuilder: FormBuilder,
                private billService: BillsService,
                public toastController: ToastController,
                private alertCtrl: AlertController,
-               public modalController: ModalController ) { }
+               public modalController: ModalController,
+               private router: Router ) { }
 
   ngOnInit() {
     this.username = localStorage.getItem('user');
@@ -50,27 +59,22 @@ export class BillPage implements OnInit {
 
     this.billForm = this.formBuilder.group({
       clientName: [''],
+      username: [this.username],
+      userId: [this.userId],
       products: this.formBuilder.array( [] ),
       taxes: [''],
       subTotal: ['', Validators.required],
       total: ['', Validators.required],
-      Date: [''],
+      Date: [this.actualDate],
       month: [this.actualMonth]
     });
 
   }
 
   GetBillById( id: string ) {
-    let data = [{
-      _id: '',
-      productName: '',
-      quantity: 0,
-      unitCost: 0,
-      price: 0
-    }];
     this.billService.GetByID( id ).subscribe( async res => {
-      data = res.data.products;
-      data.forEach( e => {
+      this.data = res.data.products;
+      this.data.forEach( e => {
         let productForm = this.formBuilder.group({
           _id: e._id,
           productName: e.productName,
@@ -111,6 +115,8 @@ export class BillPage implements OnInit {
             message: res.msj
           });
           TOAST.present();
+          this.router.navigateByUrl('/tabs/billing');
+          this.products = [];
         } else {
           const TOAST = await this.toastController.create({
             duration: 3,
@@ -127,6 +133,8 @@ export class BillPage implements OnInit {
             message: res.msj
           });
           TOAST.present();
+          this.router.navigateByUrl('/tabs/billing');
+          this.products = [];
         } else {
           const TOAST = await this.toastController.create({
             duration: 3,
@@ -151,7 +159,7 @@ export class BillPage implements OnInit {
       price: Price
     });
 
-    const QuantityTemp = this.productQuantity - 1;
+    const QuantityTemp = this.productQuantity - Quantity;
 
     if ( QuantityTemp >= 0 ) {
       this.itemsService.PUT(id, {
@@ -199,7 +207,6 @@ export class BillPage implements OnInit {
   }
 
   GetProductsById() {
-    // const id = localStorage.getItem('ProductId');
 
     const data = this.productData;
 
@@ -229,16 +236,30 @@ export class BillPage implements OnInit {
   check() {
     let SubTotal = 0;
 
-    this.products.forEach( e => {
-      SubTotal = SubTotal + (e.value.price * e.value.quantity);
-      const Total = SubTotal;
+    if ( !this.ID ) {
+      this.products.forEach( e => {
+        SubTotal = SubTotal + (e.value.price * e.value.quantity);
+        const Total = SubTotal;
 
-      this.billForm.patchValue({
-        subTotal: SubTotal,
-        total: Total
+        this.billForm.patchValue({
+          subTotal: SubTotal,
+          total: Total
+        });
+
       });
+    } else {
+      SubTotal = this.billForm.value.total;
+      this.products.forEach( e => {
+        SubTotal = SubTotal + (e.value.price * e.value.quantity);
+        const Total = SubTotal;
 
-    });
+        this.billForm.patchValue({
+          subTotal: SubTotal,
+          total: Total
+        });
+
+      });
+    }
 
 }
 
@@ -275,6 +296,7 @@ async cancel() {
                 subTotal: 0.0,
                 total: 0.0
               });
+              this.products = [];
             }
           });
 

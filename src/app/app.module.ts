@@ -41,7 +41,7 @@ export function tokenGetterFactory() {
         authScheme: 'Bearer ',
         tokenGetter: tokenGetterFactory,
         whitelistedDomains: ['localhost:8000', 'localhost:8100', 'localhost:8080', 'localhost:4200', 'localhost:3000',
-        'api-tech-nic.herokuapp.com/api']
+        'api-tech-nic.herokuapp.com']
       }
     })
   ],

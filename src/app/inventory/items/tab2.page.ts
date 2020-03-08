@@ -14,6 +14,11 @@ import { ItemsModel } from '../../helpers/models/items.model';
 export class Tab2Page implements OnInit {
 
   items: ItemsModel[];
+  username: string;
+  role: string;
+  userId: string;
+  admin = false;
+  searchItemsInput;
 
   constructor( private router: Router,
                private itemsService: ItemsService,
@@ -23,7 +28,17 @@ export class Tab2Page implements OnInit {
   @ViewChild('slidingList', {static: true}) slidingList;
 
   ngOnInit() {
+    this.username = localStorage.getItem('user');
+    this.role = localStorage.getItem('role');
+    this.userId = localStorage.getItem('userId');
+    this.roles();
     this.GET();
+  }
+
+  roles() {
+    if ( (this.role === 'admin') || (this.role === 'CEO') ) {
+      this.admin = true;
+    }
   }
 
   async GET() {
@@ -33,29 +48,16 @@ export class Tab2Page implements OnInit {
     });
   }
 
-  async newProduct() {
-    const alert = await this.alertCtrl.create({
-      header: '¿Qué desea hacer?',
-      buttons: [
-        {
-          text: 'Nuevo Producto',
-          handler: ( data ) => {
-            this.router.navigateByUrl('/admin-items');
-          }
-        },
-        {
-          text: 'Nueva Categoría',
-          handler: ( data ) => {
-            this.router.navigateByUrl('/categories');
-          }
-        },
-        {
-          text: 'Cancelar',
-          role: 'cancel'
-        }
-      ]
-    });
-    alert.present();
+  newProduct() {
+    this.router.navigateByUrl('/admin-items');
+  }
+
+  newCategory() {
+    this.router.navigateByUrl('/categories');
+  }
+
+  listCategories() {
+    this.router.navigateByUrl('/categories/list-categories');
   }
 
   async edit( itemId: string ) {
