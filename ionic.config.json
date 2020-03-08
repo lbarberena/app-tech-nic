@@ -1,5 +1,7 @@
 {
   "name": "AppTechNic",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "angular"
 }

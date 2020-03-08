@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
+
+import { ToastController, AlertController, ModalController } from '@ionic/angular';
+
 import { BillsService } from 'src/app/services/bills.service';
 import { ItemsModel } from 'src/app/helpers/models/items.model';
 import { ItemsService } from 'src/app/services/items.service';
-import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
-import { ToastController, AlertController, ModalController } from '@ionic/angular';
 import { ProductsModalPage } from 'src/app/products-modal/products-modal.page';
 
 @Component({
@@ -23,6 +25,9 @@ export class BillPage implements OnInit {
   actualMonth = new Date().getUTCMonth() + 1;
   productQuantity: number;
   productListForm: FormGroup;
+  username: string;
+  role: string;
+  userId: string;
   constructor( private route: ActivatedRoute,
                private itemsService: ItemsService,
                private formBuilder: FormBuilder,
@@ -32,6 +37,9 @@ export class BillPage implements OnInit {
                public modalController: ModalController ) { }
 
   ngOnInit() {
+    this.username = localStorage.getItem('user');
+    this.role = localStorage.getItem('role');
+    this.userId = localStorage.getItem('userId');
     this.ID = this.route.snapshot.paramMap.get('id');
     if ( this.ID ) {
       this.title = 'Editar Factura';
@@ -75,11 +83,6 @@ export class BillPage implements OnInit {
 
       this.billForm.patchValue({
         clientName: res.data.clientName,
-        universityId: res.data.universityId,
-        customerKind: res.data.customerKind,
-        paymentType: res.data.paymentType,
-        paymentTerms: res.data.paymentTerms,
-        taxes: res.data.taxes,
         subTotal: res.data.subTotal,
         total: res.data.total,
         Date: res.data.Date
@@ -95,22 +98,44 @@ export class BillPage implements OnInit {
   }
 
   SAVE() {
-    const bill = this.billForm.value;
-    this.billService.POST( bill ).subscribe( async res => {
-      if ( res.success ) {
-        const TOAST = await this.toastController.create({
-          duration: 3,
-          message: res.msj
-        });
-        TOAST.present();
-      } else {
-        const TOAST = await this.toastController.create({
-          duration: 3,
-          message: res.msj
-        });
-        TOAST.present();
-      }
+    this.billForm.patchValue({
+      username: this.username,
+      userId: this.userId
     });
+    const bill = this.billForm.value;
+    if (this.ID ) {
+      this.billService.PUT(this.ID, bill ).subscribe( async res => {
+        if ( res.success ) {
+          const TOAST = await this.toastController.create({
+            duration: 3,
+            message: res.msj
+          });
+          TOAST.present();
+        } else {
+          const TOAST = await this.toastController.create({
+            duration: 3,
+            message: res.msj
+          });
+          TOAST.present();
+        }
+      });
+    } else {
+      this.billService.POST( bill ).subscribe( async res => {
+        if ( res.success ) {
+          const TOAST = await this.toastController.create({
+            duration: 3,
+            message: res.msj
+          });
+          TOAST.present();
+        } else {
+          const TOAST = await this.toastController.create({
+            duration: 3,
+            message: res.msj
+          });
+          TOAST.present();
+        }
+      });
+    }
   }
 
   get productsForm() {
@@ -206,11 +231,9 @@ export class BillPage implements OnInit {
 
     this.products.forEach( e => {
       SubTotal = SubTotal + (e.value.price * e.value.quantity);
-      const tax = SubTotal * 0.15;
-      const Total = SubTotal + tax;
+      const Total = SubTotal;
 
       this.billForm.patchValue({
-        taxes: tax,
         subTotal: SubTotal,
         total: Total
       });
@@ -229,6 +252,40 @@ async presentModal() {
     this.GetProductsById();
   });
   return await modal.present();
+}
+
+async cancel() {
+  if ( !this.ID ) {
+    this.products.forEach( res => {
+
+      this.itemsService.GetByID( res.value._id ).subscribe( async item => {
+
+        if ( res.value._id === item.data._id ) {
+
+          const Quantity = item.data.quantity + 1;
+
+          this.itemsService.PUT(item.data._id, {
+            quantity: Quantity
+          }).subscribe( r => {
+            this.check();
+            this.GetItems();
+            if ( this.products.length === 0 ) {
+              this.billForm.patchValue({
+                taxes: 0.0,
+                subTotal: 0.0,
+                total: 0.0
+              });
+            }
+          });
+
+        }
+
+      });
+
+    });
+  } else {
+    return;
+  }
 }
 
 }

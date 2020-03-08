@@ -3,7 +3,7 @@ export interface AuthResponseModel {
     msj: string;
     data: {
       token: string,
-      userdId: string,
+      userId: string,
       username: string,
       role: string,
       expireTime: string

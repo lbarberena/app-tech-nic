@@ -72,7 +72,8 @@
             <ion-input type="date" formControlName="createDate"></ion-input>
         </ion-item>
 
-        <ion-button expand="full" type="submit" [disabled]="!newItem.valid" (click)="SAVE()">Guardar</ion-button>
     </form>
+
+    <ion-button expand="full" [disabled]="!newItem.valid" (click)="SAVE()">Guardar</ion-button>
 
 </ion-content>

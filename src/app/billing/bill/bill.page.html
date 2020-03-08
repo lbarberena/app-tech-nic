@@ -1,7 +1,7 @@
 <ion-header>
     <ion-toolbar>
         <ion-buttons slot="start">
-            <ion-back-button></ion-back-button>
+            <ion-back-button (click)="cancel()"></ion-back-button>
         </ion-buttons>
         <ion-title>{{ title }}</ion-title>
     </ion-toolbar>
@@ -43,7 +43,9 @@
                         <ion-input type="text" formControlName="price"></ion-input>
                     </ion-col>
                     <ion-col>
-
+                        <ion-button (click)="deleteProduct( i )">
+                            <ion-icon slot="icon-only" name="close"></ion-icon>
+                        </ion-button>
                     </ion-col>
                 </ion-row>
             </ion-grid>

@@ -22,6 +22,7 @@ export class TabsPage {
             localStorage.removeItem('auth-token');
             localStorage.removeItem('user');
             localStorage.removeItem('role');
+            localStorage.removeItem('userId');
             this.router.navigateByUrl('/authentication');
           }
         },

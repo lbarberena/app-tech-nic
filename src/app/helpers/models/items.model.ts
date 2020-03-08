@@ -1,6 +1,8 @@
 export interface ItemsModel {
     _id: string;
     code: string;
+    userId: string;
+    username: string;
     name: string;
     model: string;
     brand: string;

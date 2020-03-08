@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { BillsModel } from '../helpers/models/bills.model';
-import { BillsService } from '../services/bills.service';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
+
 import { ToastController, AlertController } from '@ionic/angular';
+
+import { BillsService } from '../services/bills.service';
+import { BillsModel } from '../helpers/models/bills.model';
 
 @Component({
   selector: 'app-tab1',
@@ -18,6 +20,7 @@ export class Tab1Page implements OnInit {
                public toastController: ToastController,
                private alertCtrl: AlertController ) {}
 
+  @ViewChild('slidingList', {static: true}) slidingList;
   ngOnInit() {
     this.loading = true;
     this.GET();
@@ -35,7 +38,8 @@ export class Tab1Page implements OnInit {
     });
   }
 
-  edit( billId: string ) {
+  async edit( billId: string ) {
+    await this.slidingList.closeSlidingItems();
     this.router.navigateByUrl(`/bill/${ billId }`);
   }
 
@@ -71,6 +75,12 @@ export class Tab1Page implements OnInit {
       ]
     });
     alert.present();
+  }
+
+  doRefresh(event) {
+    setTimeout(() => {
+      event.target.complete();
+    }, 2000);
   }
 
 }

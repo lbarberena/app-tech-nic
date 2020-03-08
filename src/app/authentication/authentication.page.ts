@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+
 import { ToastController } from '@ionic/angular';
+
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-authentication',
@@ -22,8 +24,8 @@ export class AuthenticationPage implements OnInit {
     this.validation();
 
     this.authForm = this.formBuilder.group({
-      username: ['admin', Validators.required],
-      password: ['admin123', Validators.required]
+      username: ['', Validators.required],
+      password: ['', Validators.required]
     });
 
     this.passwordForm = this.formBuilder.group({
@@ -40,9 +42,10 @@ export class AuthenticationPage implements OnInit {
       if ( res.success ) {
         localStorage.setItem('auth-token', res.data.token);
         localStorage.setItem('role', res.data.role);
-        localStorage.setItem('user', res.data.userdId);
+        localStorage.setItem('user', res.data.username);
+        localStorage.setItem('userId', res.data.userId);
         const TOAST = await this.toastController.create({
-          duration: 1,
+          duration: 3,
           message: res.msj
         });
         TOAST.present();
@@ -50,7 +53,7 @@ export class AuthenticationPage implements OnInit {
       } else if (res.success === false) {
         this.ereaseToken(res.msj);
         const TOAST = await this.toastController.create({
-          duration: 1,
+          duration: 3,
           message: res.msj
         });
         TOAST.present();
@@ -64,7 +67,7 @@ export class AuthenticationPage implements OnInit {
 
   async ereaseToken(msj: string) {
     const TOAST = await this.toastController.create({
-      duration: 1,
+      duration: 3,
       message: msj
     });
     TOAST.present();
@@ -83,7 +86,7 @@ export class AuthenticationPage implements OnInit {
     const form = this.passwordForm.value;
     if ( !this.confirmPassword ) {
       const TOAST = await this.toastController.create({
-        duration: 2,
+        duration: 3,
         message: 'Debes confirmar la contraseña'
       });
       TOAST.present();
@@ -91,13 +94,13 @@ export class AuthenticationPage implements OnInit {
       this.authService.password( form ).subscribe( async res => {
         if ( res.success ) {
           const TOAST = await this.toastController.create({
-            duration: 2,
+            duration: 3,
             message: res.msj
           });
           TOAST.present();
         } else {
           const TOAST = await this.toastController.create({
-            duration: 2,
+            duration: 3,
             message: res.msj
           });
           TOAST.present();
@@ -105,7 +108,7 @@ export class AuthenticationPage implements OnInit {
       });
     } else {
       const TOAST = await this.toastController.create({
-        duration: 2,
+        duration: 3,
         message: 'Las contraseñas no coinciden'
       });
       TOAST.present();

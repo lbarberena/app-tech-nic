@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { ItemsModel } from '../../helpers/models/items.model';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
+
+import { AlertController, ToastController } from '@ionic/angular';
+
 import { ItemsService } from '../../services/items.service';
-import { AlertController } from '@ionic/angular';
+import { ItemsModel } from '../../helpers/models/items.model';
 
 @Component({
   selector: 'app-tab2',
@@ -15,7 +17,10 @@ export class Tab2Page implements OnInit {
 
   constructor( private router: Router,
                private itemsService: ItemsService,
-               private alertCtrl: AlertController ) {}
+               private alertCtrl: AlertController,
+               public toastController: ToastController ) {}
+
+  @ViewChild('slidingList', {static: true}) slidingList;
 
   ngOnInit() {
     this.GET();
@@ -53,7 +58,8 @@ export class Tab2Page implements OnInit {
     alert.present();
   }
 
-  edit( itemId: string ) {
+  async edit( itemId: string ) {
+    await this.slidingList.closeSlidingItems();
     this.router.navigateByUrl(`/admin-items/${ itemId }`);
   }
 
@@ -63,8 +69,38 @@ export class Tab2Page implements OnInit {
     }, 2000);
   }
 
-  erease( id ) {
-    
+  async erease( id ) {
+    const alert = await this.alertCtrl.create({
+      header: '¿Seguro quieres eliminar?',
+      buttons: [
+        {
+          text: 'Confirmar',
+          handler: ( data ) => {
+            this.itemsService.DELETE( id ).subscribe( async res => {
+              if ( res.success ) {
+                const TOAST = await this.toastController.create({
+                  duration: 3,
+                  message: res.msj
+                });
+                TOAST.present();
+                this.GET();
+              } else {
+                const TOAST = await this.toastController.create({
+                  duration: 3,
+                  message: res.msj
+                });
+                TOAST.present();
+              }
+            });
+          }
+        },
+        {
+          text: 'Cancelar',
+          role: 'cancel'
+        }
+      ]
+    });
+    alert.present();
   }
-
 }
+

@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+
+import { ToastController } from '@ionic/angular';
+
 import { CategoriesModel } from 'src/app/helpers/models/categories.model';
 import { ItemsService } from 'src/app/services/items.service';
 import { CategoriesService } from 'src/app/services/categories.service';
-import { ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-admin-items',
@@ -17,6 +19,9 @@ export class AdminItemsPage implements OnInit {
   newItem: FormGroup;
   categories: CategoriesModel[];
   actualDate = new Date().getUTCMonth() + 1;
+  username: string;
+  role: string;
+  userId: string;
 
   constructor( private route: ActivatedRoute,
                private router: Router,
@@ -26,6 +31,9 @@ export class AdminItemsPage implements OnInit {
                public toastController: ToastController ) { }
 
   ngOnInit() {
+    this.username = localStorage.getItem('user');
+    this.role = localStorage.getItem('role');
+    this.userId = localStorage.getItem('userId');
     this.GetCategories();
     this.ID = this.route.snapshot.paramMap.get('id');
     if ( this.ID ) {
@@ -36,6 +44,8 @@ export class AdminItemsPage implements OnInit {
     }
     this.newItem = this.formBuilder.group({
       code: ['', Validators.required],
+      username: [''],
+      userId: [''],
       name: ['', Validators.required],
       model: [''],
       brand: [''],
@@ -95,7 +105,6 @@ export class AdminItemsPage implements OnInit {
             message: res.msj
           });
           TOAST.present();
-          console.log(res.msj);
         }
       });
     } else if ( this.ID ) {
@@ -113,7 +122,6 @@ export class AdminItemsPage implements OnInit {
             message: res.msj
           });
           TOAST.present();
-          console.log(res.msj);
         }
       });
     }
