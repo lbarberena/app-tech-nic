@@ -1,6 +1,11 @@
 <ion-header>
     <ion-toolbar>
         <ion-title>Facturación</ion-title>
+        <ion-buttons *ngIf="admin" slot="secondary">
+            <ion-button (click)="accounts()">
+                <ion-icon name="person-outline"></ion-icon>
+            </ion-button>
+        </ion-buttons>
     </ion-toolbar>
     <ion-segment (ionChange)="segmentChanged($event)">
         <ion-segment-button value="all" checked>
@@ -16,12 +21,13 @@
 
     <ion-searchbar [(ngModel)]="searchBillsInput" [ngModelOptions]="{standalone: true}" placeholder="Buscar por código"></ion-searchbar>
 
+    <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+        <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
+
     <ion-list *ngIf="showAll" #slidingList>
 
         <ion-item-sliding *ngFor="let b of bills | billsFilter: searchBillsInput">
-            <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
-                <ion-refresher-content></ion-refresher-content>
-            </ion-refresher>
 
             <ion-item>
                 <ion-row>
@@ -37,15 +43,18 @@
                 </ion-row>
             </ion-item>
 
-            <ion-item-options side="start">
+            <!-- <ion-item-options side="start">
                 <ion-item-option (click)="edit( b._id )" color="tertiary">
                     <ion-icon name="create" slot="icon-only"></ion-icon>
                 </ion-item-option>
-            </ion-item-options>
+            </ion-item-options> -->
 
             <ion-item-options side="end">
                 <ion-item-option (click)="erease( b._id )" color="danger">
                     <ion-icon name="close" slot="icon-only"></ion-icon>
+                </ion-item-option>
+                <ion-item-option (click)="edit( b._id )" color="tertiary">
+                    <ion-icon name="create" slot="icon-only"></ion-icon>
                 </ion-item-option>
             </ion-item-options>
 
@@ -56,9 +65,6 @@
     <ion-list *ngIf="showMines" #slidingList>
 
         <ion-item-sliding *ngFor="let b of myBills | billsFilter: searchBillsInput">
-            <ion-refresher slot="fixed " (ionRefresh)="doRefresh($event) ">
-                <ion-refresher-content></ion-refresher-content>
-            </ion-refresher>
 
             <ion-item>
                 <ion-row>
@@ -74,15 +80,12 @@
                 </ion-row>
             </ion-item>
 
-            <ion-item-options side="start ">
-                <ion-item-option (click)="edit( b._id ) " color="tertiary ">
-                    <ion-icon name="create " slot="icon-only "></ion-icon>
+            <ion-item-options side="end">
+                <ion-item-option (click)="erease( b._id )" color="danger">
+                    <ion-icon name="close" slot="icon-only"></ion-icon>
                 </ion-item-option>
-            </ion-item-options>
-
-            <ion-item-options side="end ">
-                <ion-item-option (click)="erease( b._id ) " color="danger ">
-                    <ion-icon name="close " slot="icon-only "></ion-icon>
+                <ion-item-option (click)="edit( b._id )" color="tertiary">
+                    <ion-icon name="create" slot="icon-only"></ion-icon>
                 </ion-item-option>
             </ion-item-options>
 
@@ -91,9 +94,9 @@
     </ion-list>
 
 
-    <ion-fab (click)="newBill() " vertical="bottom " horizontal="end " slot="fixed ">
+    <ion-fab (click)="newBill()" vertical="bottom" horizontal="end" slot="fixed">
         <ion-fab-button>
-            <ion-icon name="add "></ion-icon>
+            <ion-icon name="add"></ion-icon>
         </ion-fab-button>
     </ion-fab>
 

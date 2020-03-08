@@ -7,11 +7,11 @@ import { ToastController } from '@ionic/angular';
 import { AuthService } from '../services/auth.service';
 
 @Component({
-  selector: 'app-authentication',
-  templateUrl: './authentication.page.html'
+  selector: 'app-register',
+  templateUrl: './register.page.html'
 })
-export class AuthenticationPage implements OnInit {
-  authForm: FormGroup;
+export class RegisterPage implements OnInit {
+    registerForm: FormGroup;
   passwordForm: FormGroup;
   confirmPassword;
 
@@ -21,11 +21,13 @@ export class AuthenticationPage implements OnInit {
                public toastController: ToastController ) { }
 
   ngOnInit() {
-    this.validation();
 
-    this.authForm = this.formBuilder.group({
+    this.registerForm = this.formBuilder.group({
       username: ['', Validators.required],
-      password: ['', Validators.required]
+      password: ['', Validators.required],
+      email: ['', Validators.required],
+      name: ['', Validators.required],
+      role: ['', Validators.required]
     });
 
     this.passwordForm = this.formBuilder.group({
@@ -37,30 +39,53 @@ export class AuthenticationPage implements OnInit {
     });
   }
 
-  async login() {
-    await this.authService.login(this.authForm.value).subscribe(async res => {
-      if ( res.success ) {
+  register() {
+      const form = this.registerForm.value;
+      this.authService.register( form ).subscribe( async res => {
+        if ( res.success ) {
+            const TOAST = await this.toastController.create({
+                duration: 3,
+                message: res.msj
+              });
+            TOAST.present();
+        } else {
+            const TOAST = await this.toastController.create({
+                duration: 3,
+                message: res.msj
+              });
+            TOAST.present();
+        }
+      });
+  }
+
+  async login( Username: string, Password: string ) {
+    const data = {
+        username: Username,
+        password: Password
+    };
+    await this.authService.login( data ).subscribe(async res => {
+        if ( res.success ) {
         localStorage.setItem('auth-token', res.data.token);
         localStorage.setItem('role', res.data.role);
         localStorage.setItem('user', res.data.username);
         localStorage.setItem('userId', res.data.userId);
         const TOAST = await this.toastController.create({
-          duration: 3,
-          message: res.msj
+            duration: 3,
+            message: res.msj
         });
         TOAST.present();
         this.router.navigateByUrl('/tabs/billing');
-      } else if (res.success === false) {
+        } else if (res.success === false) {
         this.ereaseToken(res.msj);
         const TOAST = await this.toastController.create({
-          duration: 3,
-          message: res.msj
+            duration: 3,
+            message: res.msj
         });
         TOAST.present();
-      }
+        }
 
     }, error => {
-      this.ereaseToken(error.msj);
+        this.ereaseToken(error.msj);
     }
     );
   }
@@ -75,14 +100,6 @@ export class AuthenticationPage implements OnInit {
     localStorage.removeItem('user');
     localStorage.removeItem('userId');
     localStorage.removeItem('role');
-  }
-
-  validation() {
-    const token = localStorage.getItem('auth-token');
-
-    if ( token ) {
-      this.router.navigateByUrl('/tabs/billing');
-    }
   }
 
   async changePassword() {

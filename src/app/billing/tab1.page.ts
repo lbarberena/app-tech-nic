@@ -20,6 +20,8 @@ export class Tab1Page implements OnInit {
   showMines = false;
   username = '';
   searchBillsInput;
+  admin = false;
+  role = '';
 
   constructor( private billsService: BillsService,
                private router: Router,
@@ -29,12 +31,25 @@ export class Tab1Page implements OnInit {
 
   @ViewChild('slidingList', {static: true}) slidingList;
   ngOnInit() {
+    this.showAll = true;
     this.username = localStorage.getItem('user');
+    this.role = localStorage.getItem('role');
+    this.roles();
     this.GET();
   }
 
   newBill() {
     this.router.navigateByUrl(`/bill`);
+  }
+
+  accounts() {
+    this.router.navigateByUrl(`/register`);
+  }
+
+  roles() {
+    if ( (this.role === 'admin') || (this.role === 'CEO') ) {
+      this.admin = true;
+    }
   }
 
   GET() {

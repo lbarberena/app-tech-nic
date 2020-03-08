@@ -2,20 +2,25 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
 
+import { JwtModule } from '@auth0/angular-jwt';
+
+import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
+
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
+
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { JwtModule } from '@auth0/angular-jwt';
-import { FormsModule } from '@angular/forms';
-import { ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+
+import { AuthenticationPageModule } from './authentication/authentication.module';
+import { AuthenticationPage } from './authentication/authentication.page';
+import { RegisterPage } from './authentication/register.page';
 import { AuthService } from './services/auth.service';
 import { ErrorService } from './services/error.service';
-import { AuthenticationPage } from './authentication/authentication.page';
-import { AuthenticationPageModule } from './authentication/authentication.module';
 
 export function tokenGetterFactory() {
   return localStorage.getItem('auth-token');
@@ -26,7 +31,8 @@ export function tokenGetterFactory() {
     AppComponent
   ],
   entryComponents: [
-    AuthenticationPage
+    AuthenticationPage,
+    RegisterPage
   ],
   imports: [BrowserModule,
     AuthenticationPageModule,

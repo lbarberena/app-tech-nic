@@ -40,6 +40,10 @@ export class Tab2Page implements OnInit {
       this.admin = true;
     }
   }
+  
+  accounts() {
+    this.router.navigateByUrl(`/register`);
+  }
 
   async GET() {
     await this.itemsService.GET().subscribe( async res => {
