@@ -30,6 +30,7 @@ export class Tab1Page implements OnInit {
                private itemsService: ItemsService ) {}
 
   @ViewChild('slidingList', {static: true}) slidingList;
+  @ViewChild('SlidingList', {static: true}) SlidingList;
   ngOnInit() {
     this.showAll = true;
     this.username = localStorage.getItem('user');
@@ -66,7 +67,8 @@ export class Tab1Page implements OnInit {
   }
 
   async edit( billId: string ) {
-    await this.slidingList.closeSlidingItems();
+    // await this.slidingList.closeSlidingItems();
+    // await this.SlidingList.closeSlidingItems();
     this.router.navigateByUrl(`/bill/${ billId }`);
   }
 
@@ -134,6 +136,7 @@ export class Tab1Page implements OnInit {
     setTimeout(() => {
       event.target.complete();
     }, 2000);
+    this.GET();
   }
 
   segmentChanged(ev: any) {

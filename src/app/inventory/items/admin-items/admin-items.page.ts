@@ -44,8 +44,8 @@ export class AdminItemsPage implements OnInit {
     }
     this.newItem = this.formBuilder.group({
       code: ['', Validators.required],
-      username: [''],
-      userId: [''],
+      username: [this.username],
+      userId: [this.userId],
       name: ['', Validators.required],
       model: [''],
       brand: [''],

@@ -73,6 +73,7 @@ export class Tab2Page implements OnInit {
     setTimeout(() => {
       event.target.complete();
     }, 2000);
+    this.GET();
   }
 
   async erease( id ) {
