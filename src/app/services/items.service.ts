@@ -30,7 +30,7 @@ export class ItemsService {
   constructor( private http: HttpClient, private errorService: ErrorService ) { }
 
   GET(): Observable<any> {
-    return this.http.get<GenericResponseModel>( this.url )
+    return this.http.get<any>( this.url )
     .pipe(
       retry( 1 ),
       catchError( this.errorService.handleError )
@@ -45,7 +45,7 @@ export class ItemsService {
     );
   }
 
-  POST( data: any ): Observable<GenericResponseModel> {
+  POST( data: any ): Observable<any> {
     this.body = JSON.stringify( data );
 
     return this.http.post<GenericResponseModel>(this.url, this.body, this.httpOptions)
@@ -55,7 +55,7 @@ export class ItemsService {
     );
   }
 
-  PUT( itemId: string, data: any ): Observable<GenericResponseModel> {
+  PUT( itemId: string, data: any ): Observable<any> {
     this.body = JSON.stringify( data );
 
     return this.http.put<GenericResponseModel>(`${this.url}/${ itemId }`, this.body, this.httpOptions)
@@ -65,7 +65,7 @@ export class ItemsService {
     );
   }
 
-  DELETE( itemId: string ): Observable<GenericResponseModel> {
+  DELETE( itemId: string ): Observable<any> {
     return this.http.delete<GenericResponseModel>(`${this.url}/${ itemId }`)
     .pipe(
       retry( 1 ),

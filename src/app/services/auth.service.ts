@@ -45,22 +45,22 @@ export class AuthService {
       );
   }
 
-  register(user: RegisterModel): Observable<GenericResponseModel> {
-    this.body = JSON.stringify({ user });
+  register(user: RegisterModel): Observable<any> {
+    this.body = user;
     return this.http.post<GenericResponseModel>(`${this.url}/register`, this.body, this.httpOptions).pipe(
       retry(1),
       catchError(this.errorService.handleError)
     );
   }
 
-  password(user: AuthModel): Observable<GenericResponseModel> {
+  password(user: AuthModel): Observable<any> {
     return this.http.put<GenericResponseModel>(`${this.url}/password`, user).pipe(
       retry( 1 ),
       catchError( this.errorService.handleError )
     );
   }
 
-  confirmUser( user: any ): Observable<GenericResponseModel> {
+  confirmUser( user: any ): Observable<any> {
     return this.http.post<GenericResponseModel>(`${this.url}/user`, user).pipe(
       retry( 1 ),
       catchError( this.errorService.handleError )
@@ -75,7 +75,7 @@ export class AuthService {
     );
   }
 
-  GetById( idUser: string ): Observable<GenericResponseModel> {
+  GetById( idUser: string ): Observable<any> {
     return this.http.get<GenericResponseModel>(`${this.url}/users/${ idUser }`)
     .pipe(
       retry( 1 ),
@@ -83,7 +83,17 @@ export class AuthService {
     );
   }
 
-  DELETE( idUser ): Observable<GenericResponseModel> {
+  PUT( userId: string, data: any ): Observable<any> {
+    this.body = JSON.stringify( data );
+
+    return this.http.put<GenericResponseModel>(`${this.url}/users/${ userId }`, this.body, this.httpOptions)
+    .pipe(
+      retry( 1 ),
+      catchError(this.errorService.handleError)
+    );
+  }
+
+  DELETE( idUser ): Observable<any> {
     return this.http.delete<GenericResponseModel>(`${this.url}/users/${ idUser }`)
     .pipe(
       retry( 1 ),

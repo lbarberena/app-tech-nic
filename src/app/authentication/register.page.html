@@ -3,7 +3,7 @@
         <ion-buttons slot="start">
             <ion-back-button></ion-back-button>
         </ion-buttons>
-        <ion-title>Registrar Usuario</ion-title>
+        <ion-title>{{ title }}</ion-title>
     </ion-toolbar>
 </ion-header>
 
@@ -23,6 +23,10 @@
             <ion-label position="floating">Contraseña</ion-label>
             <ion-input type="password" formControlName="password"></ion-input>
         </ion-item>
+        <ion-item *ngIf="id && registerForm.controls['password'].touched">
+            <ion-label position="floating">Confirmar Contraseña</ion-label>
+            <ion-input type="password" [(ngModel)]="confirmPassword" [ngModelOptions]="{standalone: true}"></ion-input>
+        </ion-item>
         <ion-item>
             <ion-label position="floating">Correo</ion-label>
             <ion-input type="email" formControlName="email"></ion-input>
@@ -34,9 +38,10 @@
                 <ion-select-option>Vendedor</ion-select-option>
                 <ion-select-option>CEO</ion-select-option>
                 <ion-select-option>Tienda</ion-select-option>
+                <ion-select-option>Admin</ion-select-option>
             </ion-select>
         </ion-item>
 
-        <ion-button expand="full" type="submit" [disabled]="!registerForm.valid">Registrar Usuario</ion-button>
+        <ion-button expand="full" type="submit" [disabled]="!registerForm.valid">{{ btnText }}</ion-button>
     </form>
 </ion-content>

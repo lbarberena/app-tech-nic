@@ -18,6 +18,11 @@ const routes: Routes = [
     component: RegisterPage
   },
   {
+    path: 'register/:id',
+    canActivate: [AuthGuardService],
+    component: RegisterPage
+  },
+  {
     path: 'password',
     component: PasswordPage
   }

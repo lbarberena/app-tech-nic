@@ -32,7 +32,7 @@ export class AccountsPage implements OnInit {
   }
 
   async edit( storeId: string ) {
-    // this.router.navigateByUrl(`/stores/admin-stores/${ storeId }`);
+    this.router.navigateByUrl(`/register/${ storeId }`);
   }
 
   async erease( accountId: string ) {

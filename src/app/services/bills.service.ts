@@ -29,7 +29,7 @@ export class BillsService {
 
   constructor( private http: HttpClient, private errorService: ErrorService ) { }
 
-  GET(): Observable<GenericResponseModel> {
+  GET(): Observable<any> {
     return this.http.get<GenericResponseModel>( this.url )
     .pipe(
       retry( 1 ),
@@ -37,7 +37,7 @@ export class BillsService {
     );
   }
 
-  GetByID( billsId: string ): Observable<GenericResponseModel> {
+  GetByID( billsId: string ): Observable<any> {
     return this.http.get<GenericResponseModel>(`${this.url}/${ billsId }`)
     .pipe(
       retry( 1 ),
@@ -45,7 +45,7 @@ export class BillsService {
     );
   }
 
-  POST( data: any ): Observable<GenericResponseModel> {
+  POST( data: any ): Observable<any> {
     this.body = JSON.stringify( data );
 
     return this.http.post<GenericResponseModel>(this.url, this.body, this.httpOptions)
@@ -65,7 +65,7 @@ export class BillsService {
     );
   }
 
-  DELETE( billsId: string ): Observable<GenericResponseModel> {
+  DELETE( billsId: string ): Observable<any> {
     return this.http.delete<GenericResponseModel>(`${this.url}/${ billsId }`)
     .pipe(
       retry( 1 ),

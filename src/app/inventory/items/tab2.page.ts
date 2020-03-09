@@ -41,10 +41,6 @@ export class Tab2Page implements OnInit {
     }
   }
 
-  accounts() {
-    this.router.navigateByUrl(`/register`);
-  }
-
   async GET() {
     await this.itemsService.GET().subscribe( async res => {
       const itemsCollection: ItemsModel[] = (await res.data);

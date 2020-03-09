@@ -101,7 +101,7 @@ export class BillPage implements OnInit {
     });
   }
 
-  SAVE() {
+  async SAVE() {
     this.billForm.patchValue({
       username: this.username,
       userId: this.userId
@@ -126,23 +126,31 @@ export class BillPage implements OnInit {
         }
       });
     } else {
-      this.billService.POST( bill ).subscribe( async res => {
-        if ( res.success ) {
-          const TOAST = await this.toastController.create({
-            duration: 3,
-            message: res.msj
-          });
-          TOAST.present();
-          this.router.navigateByUrl('/tabs/billing');
-          this.products = [];
-        } else {
-          const TOAST = await this.toastController.create({
-            duration: 3,
-            message: res.msj
-          });
-          TOAST.present();
-        }
-      });
+      if ( this.products.length === 0 ) {
+        const TOAST = await this.toastController.create({
+          duration: 3,
+          message: 'Selecciona Productos'
+        });
+        TOAST.present();
+      } else {
+        this.billService.POST( bill ).subscribe( async res => {
+          if ( res.success ) {
+            const TOAST = await this.toastController.create({
+              duration: 3,
+              message: res.msj
+            });
+            TOAST.present();
+            this.router.navigateByUrl('/tabs/billing');
+            this.products = [];
+          } else {
+            const TOAST = await this.toastController.create({
+              duration: 3,
+              message: res.msj
+            });
+            TOAST.present();
+          }
+        });
+      }
     }
   }
 
