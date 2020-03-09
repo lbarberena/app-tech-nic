@@ -46,7 +46,15 @@ const routes: Routes = [
     path: 'products-modal',
     canActivate: [AuthGuardService],
     loadChildren: () => import('./products-modal/products-modal.module').then( m => m.ProductsModalPageModule)
+  },  {
+    path: 'accounts',
+    loadChildren: () => import('./accounts/accounts.module').then( m => m.AccountsPageModule)
+  },
+  {
+    path: 'stores',
+    loadChildren: () => import('./stores/stores.module').then( m => m.StoresPageModule)
   }
+
 
 ];
 @NgModule({

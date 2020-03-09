@@ -7,9 +7,11 @@
         </ion-header>
         <ion-content>
             <ion-list>
+                <ion-item routerLink="/tabs/billing">
+                    <ion-icon name="home-outline"></ion-icon>Inicio</ion-item>
                 <ion-item *ngIf="admin" routerLink="/register">
                     <ion-icon name="person-outline"></ion-icon>Registrar Usuarios</ion-item>
-                <ion-item *ngIf="admin">
+                <ion-item *ngIf="admin" routerLink="/stores">
                     <ion-icon name="cart-outline"></ion-icon>Tiendas</ion-item>
                 <ion-item *ngIf="admin">
                     <ion-icon name="people-outline"></ion-icon>Administrar Cuentas</ion-item>

@@ -67,4 +67,28 @@ export class AuthService {
     );
   }
 
+  GET(): Observable<any> {
+    return this.http.get<GenericResponseModel>( `${this.url}/users` )
+    .pipe(
+      retry( 1 ),
+      catchError( this.errorService.handleError )
+    );
+  }
+
+  GetById( idUser: string ): Observable<GenericResponseModel> {
+    return this.http.get<GenericResponseModel>(`${this.url}/users/${ idUser }`)
+    .pipe(
+      retry( 1 ),
+      catchError( this.errorService.handleError )
+    );
+  }
+
+  DELETE( idUser ): Observable<GenericResponseModel> {
+    return this.http.delete<GenericResponseModel>(`${this.url}/users/${ idUser }`)
+    .pipe(
+      retry( 1 ),
+      catchError( this.errorService.handleError )
+    );
+  }
+
 }

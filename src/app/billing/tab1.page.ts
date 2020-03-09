@@ -136,6 +136,7 @@ export class Tab1Page implements OnInit {
     setTimeout(() => {
       event.target.complete();
     }, 2000);
+    this.myBills = [];
     this.GET();
   }
 

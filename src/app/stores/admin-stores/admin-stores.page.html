@@ -1,0 +1,31 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-title>{{ title }}</ion-title>
+        <ion-buttons slot="start">
+            <ion-back-button></ion-back-button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+    <form [formGroup]="newStore">
+        <ion-item>
+            <ion-label position="floating">Nombre</ion-label>
+            <ion-input type="text" formControlName="name"></ion-input>
+        </ion-item>
+
+        <ion-item>
+            <ion-label position="floating">Número telefónico</ion-label>
+            <ion-input type="number" formControlName="phoneNumber"></ion-input>
+        </ion-item>
+
+        <ion-item>
+            <ion-label position="floating">Dirección</ion-label>
+            <ion-input type="text" formControlName="address"></ion-input>
+        </ion-item>
+
+        <ion-button expand="full" type="submit" [disabled]="!newStore.valid" (click)="SAVE()">Guardar</ion-button>
+    </form>
+
+</ion-content>
