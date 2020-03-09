@@ -47,6 +47,7 @@ const routes: Routes = [
     canActivate: [AuthGuardService],
     loadChildren: () => import('./products-modal/products-modal.module').then( m => m.ProductsModalPageModule)
   }
+
 ];
 @NgModule({
   imports: [

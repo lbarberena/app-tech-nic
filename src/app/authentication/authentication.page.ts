@@ -86,36 +86,7 @@ export class AuthenticationPage implements OnInit {
   }
 
   async changePassword() {
-    const form = this.passwordForm.value;
-    if ( !this.confirmPassword ) {
-      const TOAST = await this.toastController.create({
-        duration: 3,
-        message: 'Debes confirmar la contraseña'
-      });
-      TOAST.present();
-    } else if ( this.confirmPassword === this.passwordForm.value.password ) {
-      this.authService.password( form ).subscribe( async res => {
-        if ( res.success ) {
-          const TOAST = await this.toastController.create({
-            duration: 3,
-            message: res.msj
-          });
-          TOAST.present();
-        } else {
-          const TOAST = await this.toastController.create({
-            duration: 3,
-            message: res.msj
-          });
-          TOAST.present();
-        }
-      });
-    } else {
-      const TOAST = await this.toastController.create({
-        duration: 3,
-        message: 'Las contraseñas no coinciden'
-      });
-      TOAST.present();
-    }
+    this.router.navigateByUrl('/password');
 
   }
 

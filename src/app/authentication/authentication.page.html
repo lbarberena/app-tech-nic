@@ -20,6 +20,6 @@
         <ion-button expand="full" type="submit" [disabled]="!authForm.valid">Iniciar Sesión</ion-button>
     </form>
 
-    <ion-button expand="full">¿Olvidaste la contraseña?</ion-button>
+    <ion-button expand="full" (click)="changePassword()">¿Olvidaste la contraseña?</ion-button>
 
 </ion-content>

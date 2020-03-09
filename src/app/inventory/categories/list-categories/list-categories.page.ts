@@ -12,6 +12,8 @@ import { Router } from '@angular/router';
 export class ListCategoriesPage implements OnInit {
 
   categories: CategoriesModel[];
+  role = '';
+  admin = false;
 
   constructor( private categoriesService: CategoriesService,
                public toastController: ToastController,
@@ -22,6 +24,14 @@ export class ListCategoriesPage implements OnInit {
 
   ngOnInit() {
     this.GET();
+    this.roles();
+  }
+
+  roles() {
+    this.role = localStorage.getItem('role');
+    if ( (this.role === 'admin') || (this.role === 'CEO') ) {
+      this.admin = true;
+    }
   }
 
   GET() {

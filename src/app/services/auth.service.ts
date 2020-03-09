@@ -54,7 +54,14 @@ export class AuthService {
   }
 
   password(user: AuthModel): Observable<GenericResponseModel> {
-    return this.http.put<GenericResponseModel>(`${this.url}/password`, user, this.httpOptions).pipe(
+    return this.http.put<GenericResponseModel>(`${this.url}/password`, user).pipe(
+      retry( 1 ),
+      catchError( this.errorService.handleError )
+    );
+  }
+
+  confirmUser( user: any ): Observable<GenericResponseModel> {
+    return this.http.post<GenericResponseModel>(`${this.url}/user`, user).pipe(
       retry( 1 ),
       catchError( this.errorService.handleError )
     );

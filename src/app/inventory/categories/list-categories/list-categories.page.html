@@ -46,7 +46,7 @@
     </ion-list>
 
 
-    <ion-fab (click)="newCategories()" vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab *ngIf="admin" (click)="newCategories()" vertical="bottom" horizontal="end" slot="fixed">
         <ion-fab-button>
             <ion-icon name="add"></ion-icon>
         </ion-fab-button>
