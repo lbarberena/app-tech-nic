@@ -13,7 +13,7 @@
                     <ion-icon name="person-outline"></ion-icon>Registrar Usuarios</ion-item>
                 <ion-item *ngIf="admin" routerLink="/stores">
                     <ion-icon name="cart-outline"></ion-icon>Tiendas</ion-item>
-                <ion-item *ngIf="admin">
+                <ion-item *ngIf="admin" routerLink="/accounts">
                     <ion-icon name="people-outline"></ion-icon>Administrar Cuentas</ion-item>
                 <ion-item *ngIf="!admin" routerLink="/categories/list-categories">
                     <ion-icon name="filter-outline"></ion-icon>Categorías</ion-item>

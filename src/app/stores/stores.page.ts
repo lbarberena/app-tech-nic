@@ -14,7 +14,6 @@ import { StoresModel } from '../helpers/models/stores.model';
 export class StoresPage implements OnInit {
 
   stores: StoresModel[];
-  role = '';
 
   constructor( private storesService: StoresService,
                private router: Router,
