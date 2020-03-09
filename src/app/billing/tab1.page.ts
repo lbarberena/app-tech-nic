@@ -12,14 +12,13 @@ import { BillsModel } from '../helpers/models/bills.model';
   templateUrl: 'tab1.page.html',
   styleUrls: ['tab1.page.scss']
 })
-export class Tab1Page implements OnInit {
+export class Tab1Page {
   bills: BillsModel[];
   myBills = [];
   products = [];
-  showAll = false;
-  showMines = false;
   username = '';
   searchBillsInput;
+  selected;
   admin = false;
   role = '';
 
@@ -31,8 +30,9 @@ export class Tab1Page implements OnInit {
 
   @ViewChild('slidingList', {static: true}) slidingList;
   @ViewChild('SlidingList', {static: true}) SlidingList;
-  ngOnInit() {
-    this.showAll = true;
+
+  ionViewWillEnter() {
+    this.selected = 'all';
     this.username = localStorage.getItem('user');
     this.role = localStorage.getItem('role');
     this.roles();
@@ -48,7 +48,7 @@ export class Tab1Page implements OnInit {
   }
 
   roles() {
-    if ( (this.role === 'admin') || (this.role === 'CEO') ) {
+    if ( (this.role === 'Admin') || (this.role === 'CEO') ) {
       this.admin = true;
     }
   }
@@ -138,16 +138,6 @@ export class Tab1Page implements OnInit {
     }, 2000);
     this.myBills = [];
     this.GET();
-  }
-
-  segmentChanged(ev: any) {
-    if ( ev.detail.value === 'all' ) {
-      this.showAll = true;
-      this.showMines = false;
-    } else if ( ev.detail.value === 'mines' ) {
-      this.showAll = false;
-      this.showMines = true;
-    }
   }
 
 }

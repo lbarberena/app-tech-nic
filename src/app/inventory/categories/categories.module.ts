@@ -8,12 +8,14 @@ import { CategoriesPageRoutingModule } from './categories-routing.module';
 
 import { CategoriesPage } from './categories.page';
 import { ReactiveFormsModule } from '@angular/forms';
+import { PipesModule } from 'src/app/helpers/pipes/pipes.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
+    PipesModule,
     CategoriesPageRoutingModule,
     ReactiveFormsModule
   ],

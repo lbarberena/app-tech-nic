@@ -8,13 +8,14 @@ import { ItemsService } from '../services/items.service';
   templateUrl: './products-modal.page.html',
   styleUrls: ['./products-modal.page.scss'],
 })
-export class ProductsModalPage implements OnInit {
+export class ProductsModalPage {
   items: ItemsModel[];
+  searchItemsInput;
 
   constructor( public modalController: ModalController,
                private itemsService: ItemsService ) { }
 
-  ngOnInit() {
+  ionViewWillEnter() {
     this.GET();
   }
 

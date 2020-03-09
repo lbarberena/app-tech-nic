@@ -19,7 +19,8 @@ export class ItemsFilterPipe implements PipeTransform {
 
     return items.filter( ( it: ItemsModel ) => {
       return it.name.toString().toLowerCase().includes( searchText ) ||
-      it.code.toString().toLowerCase().includes( searchText );
+      it.code.toString().toLowerCase().includes( searchText ) ||
+      it.category.toString().toLowerCase().includes( searchText );
     });
   }
 }

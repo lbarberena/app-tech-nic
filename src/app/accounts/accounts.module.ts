@@ -7,13 +7,15 @@ import { IonicModule } from '@ionic/angular';
 import { AccountsPageRoutingModule } from './accounts-routing.module';
 
 import { AccountsPage } from './accounts.page';
+import { PipesModule } from '../helpers/pipes/pipes.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    AccountsPageRoutingModule
+    AccountsPageRoutingModule,
+    PipesModule
   ],
   declarations: [AccountsPage]
 })

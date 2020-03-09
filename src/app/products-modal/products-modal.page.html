@@ -11,7 +11,34 @@
 
 <ion-content>
 
-    <ion-list>
+    <ion-searchbar [(ngModel)]="searchItemsInput" [ngModelOptions]="{standalone: true}" placeholder="Buscar por nombre o código"></ion-searchbar>
+
+    <ion-card *ngFor="let i of items | itemsFilter: searchItemsInput" (click)="dismiss( i )">
+        <ion-card-header>
+            <ion-card-subtitle>Código: {{ i.code }}</ion-card-subtitle>
+            <ion-card-title>Nombre: {{ i.name }}</ion-card-title>
+        </ion-card-header>
+
+        <ion-card-content>
+            <ion-grid>
+                <ion-row>
+                    <ion-col>
+                        <ion-label>Cantidad: {{ i.quantity }}</ion-label>
+                    </ion-col>
+                    <ion-col>
+                        <ion-label>Color: {{ i.color }}</ion-label>
+                    </ion-col>
+                </ion-row>
+                <ion-row>
+                    <ion-col>
+                        <ion-label>Descripción: {{ i.description }}</ion-label>
+                    </ion-col>
+                </ion-row>
+            </ion-grid>
+        </ion-card-content>
+    </ion-card>
+
+    <!-- <ion-list>
         <ion-item *ngFor="let i of items" (click)="dismiss( i )">
             <ion-grid>
                 <ion-row>
@@ -30,6 +57,6 @@
                 </ion-row>
             </ion-grid>
         </ion-item>
-    </ion-list>
+    </ion-list> -->
 
 </ion-content>

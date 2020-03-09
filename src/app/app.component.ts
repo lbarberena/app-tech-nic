@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { Platform, AlertController } from '@ionic/angular';
+import { Platform, AlertController, MenuController } from '@ionic/angular';
 
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
@@ -24,7 +24,8 @@ export class AppComponent {
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
     private router: Router,
-    private alertCtrl: AlertController
+    private alertCtrl: AlertController,
+    public menuCtrl: MenuController
   ) {
     this.initializeApp();
     this.roles();
@@ -43,7 +44,7 @@ export class AppComponent {
 
   roles() {
     this.role = localStorage.getItem('role');
-    if ( (this.role === 'admin') || (this.role === 'CEO') ) {
+    if ( (this.role === 'Admin') || (this.role === 'CEO') ) {
       this.admin = true;
     }
   }
@@ -59,6 +60,7 @@ export class AppComponent {
             localStorage.removeItem('user');
             localStorage.removeItem('role');
             localStorage.removeItem('userId');
+            this.closeMenu();
             this.router.navigateByUrl('/authentication');
           }
         },
@@ -69,5 +71,9 @@ export class AppComponent {
       ]
     });
     alert.present();
+  }
+
+  closeMenu() {
+    this.menuCtrl.close();
   }
 }

@@ -7,12 +7,14 @@ import { IonicModule } from '@ionic/angular';
 import { ListCategoriesPageRoutingModule } from './list-categories-routing.module';
 
 import { ListCategoriesPage } from './list-categories.page';
+import { PipesModule } from 'src/app/helpers/pipes/pipes.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
+    PipesModule,
     ListCategoriesPageRoutingModule
   ],
   declarations: [ListCategoriesPage]

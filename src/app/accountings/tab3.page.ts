@@ -19,7 +19,7 @@ export class Tab3Page implements OnInit {
   }
 
   roles() {
-    if ( (this.role === 'admin') || (this.role === 'CEO') ) {
+    if ( (this.role === 'Admin') || (this.role === 'CEO') ) {
       this.admin = true;
     }
   }

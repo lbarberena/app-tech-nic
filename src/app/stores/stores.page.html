@@ -9,14 +9,14 @@
 
 <ion-content [fullscreen]="true">
 
-    <ion-searchbar placeholder="Buscar por nombre"></ion-searchbar>
+    <ion-searchbar [(ngModel)]="searchInput" [ngModelOptions]="{standalone: true}" placeholder="Buscar por nombre"></ion-searchbar>
     <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
         <ion-refresher-content></ion-refresher-content>
     </ion-refresher>
 
     <ion-list #slidingList>
 
-        <ion-item-sliding *ngFor="let s of stores">
+        <ion-item-sliding *ngFor="let s of stores | storesFilter: searchInput">
 
             <ion-item>
                 <ion-row>

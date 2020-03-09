@@ -11,7 +11,7 @@ import { ItemsModel } from '../../helpers/models/items.model';
   templateUrl: 'tab2.page.html',
   styleUrls: ['tab2.page.scss']
 })
-export class Tab2Page implements OnInit {
+export class Tab2Page {
 
   items: ItemsModel[];
   username: string;
@@ -27,7 +27,7 @@ export class Tab2Page implements OnInit {
 
   @ViewChild('slidingList', {static: true}) slidingList;
 
-  ngOnInit() {
+  ionViewWillEnter() {
     this.username = localStorage.getItem('user');
     this.role = localStorage.getItem('role');
     this.userId = localStorage.getItem('userId');
@@ -36,7 +36,7 @@ export class Tab2Page implements OnInit {
   }
 
   roles() {
-    if ( (this.role === 'admin') || (this.role === 'CEO') ) {
+    if ( (this.role === 'Admin') || (this.role === 'CEO') ) {
       this.admin = true;
     }
   }

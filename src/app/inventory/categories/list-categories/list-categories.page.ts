@@ -9,11 +9,12 @@ import { Router } from '@angular/router';
   templateUrl: './list-categories.page.html',
   styleUrls: ['./list-categories.page.scss'],
 })
-export class ListCategoriesPage implements OnInit {
+export class ListCategoriesPage {
 
   categories: CategoriesModel[];
   role = '';
   admin = false;
+  searchInput;
 
   constructor( private categoriesService: CategoriesService,
                public toastController: ToastController,
@@ -22,14 +23,14 @@ export class ListCategoriesPage implements OnInit {
 
   @ViewChild('slidingList', {static: true}) slidingList;
 
-  ngOnInit() {
+  ionViewWillEnter() {
     this.GET();
     this.roles();
   }
 
   roles() {
     this.role = localStorage.getItem('role');
-    if ( (this.role === 'admin') || (this.role === 'CEO') ) {
+    if ( (this.role === 'Admin') || (this.role === 'CEO') ) {
       this.admin = true;
     }
   }

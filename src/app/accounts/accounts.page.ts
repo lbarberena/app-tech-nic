@@ -9,16 +9,17 @@ import { RegisterModel } from '../helpers/models/register.model';
   templateUrl: './accounts.page.html',
   styleUrls: ['./accounts.page.scss'],
 })
-export class AccountsPage implements OnInit {
+export class AccountsPage {
 
   accounts: RegisterModel[];
+  searchInput;
 
   constructor( private router: Router,
                public toastController: ToastController,
                private alertCtrl: AlertController,
                private authService: AuthService ) { }
 
-  ngOnInit() {
+  ionViewWillEnter() {
     this.GET();
   }
 

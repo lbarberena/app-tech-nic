@@ -5,17 +5,17 @@ import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { BillsFilterPipe } from '../helpers/pipes/billsFilter.pipe';
-
 import { Tab1Page } from './tab1.page';
+import { PipesModule } from '../helpers/pipes/pipes.module';
 
 @NgModule({
   imports: [
     IonicModule,
     CommonModule,
     FormsModule,
+    PipesModule,
     RouterModule.forChild([{ path: '', component: Tab1Page }])
   ],
-  declarations: [Tab1Page, BillsFilterPipe]
+  declarations: [Tab1Page]
 })
 export class Tab1PageModule {}

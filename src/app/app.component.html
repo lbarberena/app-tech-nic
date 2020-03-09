@@ -7,15 +7,15 @@
         </ion-header>
         <ion-content>
             <ion-list>
-                <ion-item routerLink="/tabs/billing">
+                <ion-item routerLink="/tabs/billing" (click)="closeMenu()">
                     <ion-icon name="home-outline"></ion-icon>Inicio</ion-item>
-                <ion-item *ngIf="admin" routerLink="/register">
+                <ion-item *ngIf="admin" routerLink="/register" (click)="closeMenu()">
                     <ion-icon name="person-outline"></ion-icon>Registrar Usuarios</ion-item>
-                <ion-item *ngIf="admin" routerLink="/stores">
+                <ion-item *ngIf="admin" routerLink="/stores" (click)="closeMenu()">
                     <ion-icon name="cart-outline"></ion-icon>Tiendas</ion-item>
-                <ion-item *ngIf="admin" routerLink="/accounts">
+                <ion-item *ngIf="admin" routerLink="/accounts" (click)="closeMenu()">
                     <ion-icon name="people-outline"></ion-icon>Administrar Cuentas</ion-item>
-                <ion-item *ngIf="!admin" routerLink="/categories/list-categories">
+                <ion-item *ngIf="!admin" routerLink="/categories/list-categories" (click)="closeMenu()">
                     <ion-icon name="filter-outline"></ion-icon>Categorías</ion-item>
                 <ion-item color="danger" (click)="logout()">
                     <ion-icon name="power-outline"></ion-icon>Cerrar sesión</ion-item>

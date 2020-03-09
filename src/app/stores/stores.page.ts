@@ -11,16 +11,17 @@ import { StoresModel } from '../helpers/models/stores.model';
   templateUrl: './stores.page.html',
   styleUrls: ['./stores.page.scss'],
 })
-export class StoresPage implements OnInit {
+export class StoresPage {
 
   stores: StoresModel[];
+  searchInput;
 
   constructor( private storesService: StoresService,
                private router: Router,
                public toastController: ToastController,
                private alertCtrl: AlertController ) { }
 
-  ngOnInit() {
+  ionViewWillEnter() {
     this.GET();
   }
 

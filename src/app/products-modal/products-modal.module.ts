@@ -7,12 +7,14 @@ import { IonicModule } from '@ionic/angular';
 import { ProductsModalPageRoutingModule } from './products-modal-routing.module';
 
 import { ProductsModalPage } from './products-modal.page';
+import { PipesModule } from '../helpers/pipes/pipes.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
+    PipesModule,
     ProductsModalPageRoutingModule
   ],
   declarations: [ProductsModalPage]
