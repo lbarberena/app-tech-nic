@@ -6,6 +6,22 @@
             </ion-toolbar>
         </ion-header>
         <ion-content>
+            <ion-item-divider>
+                <ion-avatar slot="start">
+                    <img src="../assets/icon/technic.png">
+                </ion-avatar>
+                <ion-grid>
+                    <ion-row>
+
+                    </ion-row>
+                    <ion-row>
+                        <ion-label>{{ name }}</ion-label>
+                    </ion-row>
+                    <ion-row>
+                        <ion-label>@{{ username }}</ion-label>
+                    </ion-row>
+                </ion-grid>
+            </ion-item-divider>
             <ion-list>
                 <ion-item routerLink="/tabs/billing" (click)="closeMenu()">
                     <ion-icon name="home-outline"></ion-icon>Inicio</ion-item>

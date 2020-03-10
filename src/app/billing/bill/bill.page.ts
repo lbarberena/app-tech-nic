@@ -36,6 +36,8 @@ export class BillPage implements OnInit {
     unitCost: 0,
     price: 0
   }];
+
+  btnBill = '';
   constructor( private route: ActivatedRoute,
                private itemsService: ItemsService,
                private formBuilder: FormBuilder,
@@ -67,8 +69,10 @@ export class BillPage implements OnInit {
     if ( this.ID ) {
       this.title = 'Editar Factura';
       this.GetBillById(this.ID);
+      this.btnBill = 'Editar Factura';
     } else {
       this.title = 'Nueva Factura';
+      this.btnBill = 'Facturar';
     }
   }
 

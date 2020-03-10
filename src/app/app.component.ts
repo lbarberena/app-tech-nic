@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { Platform, AlertController, MenuController } from '@ionic/angular';
 
@@ -7,7 +8,6 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 
 import { AuthenticationPage } from './authentication/authentication.page';
 import { Tab1Page } from './billing/tab1.page';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -19,6 +19,8 @@ export class AppComponent {
   rootPage;
   admin = false;
   role = '';
+  name = '';
+  username = '';
   constructor(
     private platform: Platform,
     private splashScreen: SplashScreen,
@@ -35,7 +37,8 @@ export class AppComponent {
     this.platform.ready().then(() => {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
-      this.token = localStorage.getItem('auth-token');
+      this.name = localStorage.getItem('name');
+      this.username = localStorage.getItem('user');
       this.rootPage = this.token
                     ? Tab1Page
                     : AuthenticationPage;

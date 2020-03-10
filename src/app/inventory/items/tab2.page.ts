@@ -25,6 +25,9 @@ export class Tab2Page {
   CEO = false;
   store = false;
   searchItemsInput;
+  selected;
+  goneItems = [];
+  goneItemsStore = [];
 
   constructor( private router: Router,
                private itemsService: ItemsService,
@@ -40,10 +43,15 @@ export class Tab2Page {
                }
 
   ionViewWillEnter() {
+    this.selected = 'all';
     this.username = localStorage.getItem('user');
     this.role = localStorage.getItem('role');
     this.userId = localStorage.getItem('userId');
     this.name = localStorage.getItem('name');
+    this.items = [];
+    this.itemsStore = [];
+    this.goneItems = [];
+    this.goneItemsStore = [];
     this.roles();
     this.GET();
   }
@@ -71,7 +79,23 @@ export class Tab2Page {
 
       itemsCollection.forEach( e => {
         if ( e.store === this.name ) {
-          this.itemsStore.push(e);
+          if ( e.quantity > 0 ) {
+            this.itemsStore.push(e);
+          }
+        }
+      });
+
+      itemsCollection.forEach( e => {
+        if ( e.quantity === 0 ) {
+          this.goneItems.push(e);
+        }
+      });
+
+      itemsCollection.forEach( e => {
+        if ( e.quantity === 0 ) {
+          if ( e.store === this.name ) {
+            this.goneItemsStore.push(e);
+          }
         }
       });
     });
@@ -99,6 +123,8 @@ export class Tab2Page {
     }, 2000);
     this.items = [];
     this.itemsStore = [];
+    this.goneItems = [];
+    this.goneItemsStore = [];
     this.GET();
   }
 
