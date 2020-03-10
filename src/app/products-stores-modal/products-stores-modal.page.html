@@ -1,6 +1,6 @@
 <ion-header>
     <ion-toolbar>
-        <ion-title>Seleccione Producto</ion-title>
+        <ion-title>Productos en {{ storeName }}</ion-title>
         <ion-buttons slot="end">
             <ion-button (click)="closeModal()">
                 <ion-icon slot="icon-only" name="close"></ion-icon>
@@ -15,7 +15,7 @@
 
     <div *ngIf="admin && CEO">
 
-        <ion-card *ngFor="let i of items | itemsFilter: searchItemsInput" (click)="dismiss( i )">
+        <ion-card *ngFor="let i of items | itemsFilter: searchItemsInput">
             <ion-card-header>
                 <ion-card-subtitle>Código: {{ i.code }}</ion-card-subtitle>
                 <ion-card-title>Nombre: {{ i.name }}</ion-card-title>
@@ -48,34 +48,4 @@
         </ion-card>
 
     </div>
-
-    <div *ngIf="store">
-
-        <ion-card *ngFor="let i of itemsStore | itemsFilter: searchItemsInput" (click)="dismiss( i )">
-            <ion-card-header>
-                <ion-card-subtitle>Código: {{ i.code }}</ion-card-subtitle>
-                <ion-card-title>Nombre: {{ i.name }}</ion-card-title>
-            </ion-card-header>
-
-            <ion-card-content>
-                <ion-grid>
-                    <ion-row>
-                        <ion-col>
-                            <ion-label>Cantidad: {{ i.quantity }}</ion-label>
-                        </ion-col>
-                        <ion-col>
-                            <ion-label>Color: {{ i.color }}</ion-label>
-                        </ion-col>
-                    </ion-row>
-                    <ion-row>
-                        <ion-col>
-                            <ion-label>Descripción: {{ i.description }}</ion-label>
-                        </ion-col>
-                    </ion-row>
-                </ion-grid>
-            </ion-card-content>
-        </ion-card>
-
-    </div>
-
 </ion-content>

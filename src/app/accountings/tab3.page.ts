@@ -60,6 +60,9 @@ export class Tab3Page implements OnInit {
 
   ionViewWillEnter() {
     this.actualDate = new Date();
+    this.name = localStorage.getItem('name');
+    this.role = localStorage.getItem('role');
+    this.userId = localStorage.getItem('userId');
     this.total = 0;
     this.bills = [];
     this.myBills = [];
@@ -172,7 +175,6 @@ export class Tab3Page implements OnInit {
 
   saveIncomes() {
     const form = this.accountingForm.value;
-    console.log(form);
     this.accountingService.POST( form ).subscribe( async res => {
       if ( res.success ) {
         const TOAST = await this.toastController.create({

@@ -8,7 +8,7 @@
 </ion-header>
 
 <ion-content>
-    <form [formGroup]="registerForm" (ngSubmit)="register()">
+    <form [formGroup]="registerForm">
         <ion-item>
             <ion-label position="floating">Nombre y apellido</ion-label>
             <ion-input type="text" formControlName="name"></ion-input>
@@ -42,7 +42,32 @@
             </ion-select>
         </ion-item>
 
-        <ion-button *ngIf="changePassword" expand="full" (click)="btnChangePassword()">Cambiar Contraseña</ion-button>
-        <ion-button expand="full" type="submit" [disabled]="!registerForm.valid">{{ btnText }}</ion-button>
+        <ion-item *ngIf="this.registerForm.value.role === 'Tienda'">
+            <ion-label position="floating">Tienda</ion-label>
+            <ion-select placeholder="Selecciona una..." formControlName="store">
+                <ion-select-option *ngFor="let s of stores">{{ s.name }}</ion-select-option>
+            </ion-select>
+        </ion-item>
+
     </form>
+
+    <form *ngIf="(this.registerForm.value.role === 'Tienda') && (!id) && (!this.registerForm.value.store)" [formGroup]="newStore">
+        <ion-item>
+            <ion-label position="floating">Nombre de tienda</ion-label>
+            <ion-input type="text" formControlName="name"></ion-input>
+        </ion-item>
+
+        <ion-item>
+            <ion-label position="floating">Teléfono de tienda</ion-label>
+            <ion-input type="text" formControlName="phoneNumber"></ion-input>
+        </ion-item>
+
+        <ion-item>
+            <ion-label position="floating">Dirección de tienda</ion-label>
+            <ion-input type="text" formControlName="address"></ion-input>
+        </ion-item>
+    </form>
+
+    <ion-button *ngIf="changePassword && id" expand="full" (click)="btnChangePassword()">Cambiar Contraseña</ion-button>
+    <ion-button expand="full" [disabled]="!registerForm.valid" (click)="register()">{{ btnText }}</ion-button>
 </ion-content>

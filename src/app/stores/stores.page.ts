@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { ToastController, AlertController } from '@ionic/angular';
+import { ToastController, AlertController, ModalController } from '@ionic/angular';
 
 import { StoresService } from '../services/stores.service';
 import { StoresModel } from '../helpers/models/stores.model';
+import { ProductsStoresModalPage } from '../products-stores-modal/products-stores-modal.page';
 
 @Component({
   selector: 'app-stores',
@@ -19,7 +20,8 @@ export class StoresPage {
   constructor( private storesService: StoresService,
                private router: Router,
                public toastController: ToastController,
-               private alertCtrl: AlertController ) { }
+               private alertCtrl: AlertController,
+               public modalController: ModalController ) { }
 
   ionViewWillEnter() {
     this.GET();
@@ -82,6 +84,15 @@ export class StoresPage {
     }, 2000);
     this.stores = [];
     this.GET();
+  }
+
+  async presentModal( name: string ) {
+    localStorage.setItem('storeName', name);
+    const modal = await this.modalController.create({
+      component: ProductsStoresModalPage
+    });
+
+    return await modal.present();
   }
 
 }

@@ -18,7 +18,7 @@
 
         <ion-item-sliding *ngFor="let s of stores | storesFilter: searchInput">
 
-            <ion-item>
+            <ion-item (click)="presentModal( s.name)">
                 <ion-grid>
                     <ion-row>
                         <ion-col>

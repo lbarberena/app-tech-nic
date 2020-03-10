@@ -5,4 +5,5 @@ export interface RegisterModel {
     password: string;
     name: string;
     role: string;
+    store: string;
   }

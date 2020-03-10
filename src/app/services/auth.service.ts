@@ -45,7 +45,7 @@ export class AuthService {
       );
   }
 
-  register(user: RegisterModel): Observable<any> {
+  register( user: any ): Observable<any> {
     this.body = user;
     return this.http.post<GenericResponseModel>(`${this.url}/register`, this.body, this.httpOptions).pipe(
       retry(1),

@@ -8,6 +8,7 @@ import { StoresPageRoutingModule } from './stores-routing.module';
 
 import { StoresPage } from './stores.page';
 import { PipesModule } from '../helpers/pipes/pipes.module';
+import { ProductsStoresModalPageModule } from '../products-stores-modal/products-stores-modal.module';
 
 @NgModule({
   imports: [
@@ -15,7 +16,8 @@ import { PipesModule } from '../helpers/pipes/pipes.module';
     FormsModule,
     IonicModule,
     PipesModule,
-    StoresPageRoutingModule
+    StoresPageRoutingModule,
+    ProductsStoresModalPageModule
   ],
   declarations: [StoresPage]
 })
