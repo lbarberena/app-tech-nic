@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+
 import { ModalController } from '@ionic/angular';
+
 import { ItemsService } from '../services/items.service';
 import { ItemsModel } from '../helpers/models/items.model';
 
@@ -70,7 +72,10 @@ export class ProductsCategoryModalPage {
 
       itemsCollection.forEach( e => {
         if ( e.store === this.name ) {
-          this.itemsStore.push(e);
+          if ( e.category === this.categoryName ) {
+            this.itemsStore.push(e);
+          }
+
         }
       });
     });

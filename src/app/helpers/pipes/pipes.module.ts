@@ -10,6 +10,7 @@ import { BillsFilterPipe } from './billsFilter.pipe';
 import { CategoriesFilterPipe } from './categoriesFilter.pipe';
 import { ItemsFilterPipe } from './itemsFilter.pipe';
 import { StoresFilterPipe } from './storesFilter.pipe';
+import { OrdersFilterPipe } from './ordersFilter.pipe';
 
 
 
@@ -20,7 +21,8 @@ import { StoresFilterPipe } from './storesFilter.pipe';
     BillsFilterPipe,
     ItemsFilterPipe,
     CategoriesFilterPipe,
-    AccountingsFilterPipe
+    AccountingsFilterPipe,
+    OrdersFilterPipe
 ],
   imports: [
     CommonModule,
@@ -33,7 +35,8 @@ import { StoresFilterPipe } from './storesFilter.pipe';
     BillsFilterPipe,
     ItemsFilterPipe,
     AccountingsFilterPipe,
-    CategoriesFilterPipe
+    CategoriesFilterPipe,
+    OrdersFilterPipe
 ]
 })
 export class PipesModule { }

@@ -46,17 +46,6 @@ export class BillPage implements OnInit {
                private router: Router ) { }
 
   ngOnInit() {
-    this.username = localStorage.getItem('user');
-    this.role = localStorage.getItem('role');
-    this.userId = localStorage.getItem('userId');
-    this.ID = this.route.snapshot.paramMap.get('id');
-    if ( this.ID ) {
-      this.title = 'Editar Factura';
-      this.GetBillById(this.ID);
-    } else {
-      this.title = 'Nueva Factura';
-    }
-
     this.billForm = this.formBuilder.group({
       clientName: [''],
       username: [this.username],
@@ -68,7 +57,19 @@ export class BillPage implements OnInit {
       Date: [this.actualDate],
       month: [this.actualMonth]
     });
+  }
 
+  ionViewWillEnter() {
+    this.username = localStorage.getItem('user');
+    this.role = localStorage.getItem('role');
+    this.userId = localStorage.getItem('userId');
+    this.ID = this.route.snapshot.paramMap.get('id');
+    if ( this.ID ) {
+      this.title = 'Editar Factura';
+      this.GetBillById(this.ID);
+    } else {
+      this.title = 'Nueva Factura';
+    }
   }
 
   GetBillById( id: string ) {

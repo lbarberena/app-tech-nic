@@ -1,13 +1,13 @@
 import { PipeTransform, Pipe } from '@angular/core';
 
-import { StoresModel } from '../models/stores.model';
+import { OrdersModel } from '../models/orders.model';
 
 @Pipe({
-  name: 'storesFilter',
+  name: 'ordersFilter',
   pure: false
 })
-export class StoresFilterPipe implements PipeTransform {
-  transform(items: StoresModel[], searchText: string): any[] {
+export class OrdersFilterPipe implements PipeTransform {
+  transform(items: OrdersModel[], searchText: string): any[] {
 
     if ( !items ) {
       return [];
@@ -17,7 +17,7 @@ export class StoresFilterPipe implements PipeTransform {
     }
     searchText = searchText.toLocaleLowerCase();
 
-    return items.filter( ( it: StoresModel ) => {
+    return items.filter( ( it: OrdersModel ) => {
       return it.name.toString().toLowerCase().includes( searchText );
     });
   }

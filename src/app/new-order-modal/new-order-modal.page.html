@@ -1,0 +1,33 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-title>Crear</ion-title>
+        <ion-buttons slot="end">
+            <ion-button (click)="closeModal()">
+                <ion-icon slot="icon-only" name="close"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+    <form [formGroup]="ordersForm">
+        <ion-item>
+            <ion-label position="floating">Nombre</ion-label>
+            <ion-input type="text" formControlName="name"></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label position="floating">color</ion-label>
+            <ion-input type="text" formControlName="color"></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label position="floating">Cantidad</ion-label>
+            <ion-input type="number" formControlName="quantity"></ion-input>
+        </ion-item>
+
+    </form>
+
+    <ion-button expand="full" [disabled]="!ordersForm.valid" (click)="dismiss()">Guardar</ion-button>
+
+
+</ion-content>
