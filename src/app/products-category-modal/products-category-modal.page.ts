@@ -23,6 +23,9 @@ export class ProductsCategoryModalPage {
   CEO = false;
   store = false;
   categoryName: string;
+  selected;
+  goneItems = [];
+  goneItemsStore = [];
 
   constructor( public modalController: ModalController,
                private itemsService: ItemsService) { }
@@ -41,8 +44,12 @@ export class ProductsCategoryModalPage {
     if ( (this.role === 'Admin') || (this.role === 'CEO') ) {
       this.admin = true;
       this.CEO = true;
+      this.selected = 'all';
     } else if ( (this.role === 'Vendedor') || (this.role === 'Tienda') ) {
       this.store = true;
+      this.admin = false;
+      this.CEO = false;
+      this.selected = 'allStore';
     }
   }
 
@@ -66,16 +73,37 @@ export class ProductsCategoryModalPage {
 
       itemsCollection.forEach( e => {
         if ( e.category === this.categoryName ) {
-          this.items.push(e);
+          if ( e.quantity > 0 ) {
+            this.items.push(e);
+          }
+        }
+      });
+
+      itemsCollection.forEach( e => {
+        if ( e.category === this.categoryName ) {
+          if ( e.quantity === 0 ) {
+            this.goneItems.push(e);
+          }
         }
       });
 
       itemsCollection.forEach( e => {
         if ( e.store === this.name ) {
           if ( e.category === this.categoryName ) {
-            this.itemsStore.push(e);
+            if ( e.quantity > 0 ) {
+              this.itemsStore.push(e);
+            }
           }
+        }
+      });
 
+      itemsCollection.forEach( e => {
+        if ( e.store === this.name ) {
+          if ( e.category === this.categoryName ) {
+            if ( e.quantity === 0 ) {
+              this.goneItemsStore.push(e);
+            }
+          }
         }
       });
     });

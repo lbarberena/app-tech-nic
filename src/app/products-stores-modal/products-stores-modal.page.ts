@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+
 import { ModalController } from '@ionic/angular';
+
 import { ItemsService } from '../services/items.service';
 import { ItemsModel } from '../helpers/models/items.model';
 
@@ -11,6 +13,7 @@ import { ItemsModel } from '../helpers/models/items.model';
 export class ProductsStoresModalPage {
 
   items = [];
+  goneItems = [];
   searchItemsInput;
   username: string;
   role: string;
@@ -20,11 +23,13 @@ export class ProductsStoresModalPage {
   CEO = false;
   store = false;
   storeName: string;
+  selected;
 
   constructor( public modalController: ModalController,
                private itemsService: ItemsService ) { }
 
   ionViewWillEnter() {
+    this.selected = 'all';
     this.username = localStorage.getItem('user');
     this.role = localStorage.getItem('role');
     this.userId = localStorage.getItem('userId');
@@ -63,7 +68,17 @@ export class ProductsStoresModalPage {
 
       itemsCollection.forEach( e => {
         if ( e.store === this.storeName ) {
-          this.items.push(e);
+          if ( e.quantity > 0 ) {
+            this.items.push(e);
+          }
+        }
+      });
+
+      itemsCollection.forEach( e => {
+        if ( e.store === this.storeName ) {
+          if ( e.quantity === 0 ) {
+            this.goneItems.push(e);
+          }
         }
       });
     });
