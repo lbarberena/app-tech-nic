@@ -44,6 +44,10 @@ export class Tab3Page implements OnInit {
   ngOnInit() {
     this.actualDate = new Date();
     this.total = 0;
+    this.bills = [];
+    this.myBills = [];
+    this.adminBills = [];
+    this.ceoBills = [];
     this.name = localStorage.getItem('name');
     this.role = localStorage.getItem('role');
     this.userId = localStorage.getItem('userId');
@@ -67,6 +71,7 @@ export class Tab3Page implements OnInit {
     this.bills = [];
     this.myBills = [];
     this.adminBills = [];
+    this.ceoBills = [];
     this.roles();
     this.calculated = false;
     this.accountingForm.patchValue({
