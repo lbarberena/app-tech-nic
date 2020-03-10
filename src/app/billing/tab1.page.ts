@@ -30,7 +30,7 @@ export class Tab1Page {
                private itemsService: ItemsService ) {}
 
   ionViewWillEnter() {
-    this.selected = 'all';
+    this.selected = 'mines';
     this.username = localStorage.getItem('user');
     this.role = localStorage.getItem('role');
     this.userId = localStorage.getItem('userId');

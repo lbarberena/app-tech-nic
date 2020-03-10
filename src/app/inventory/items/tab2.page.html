@@ -249,6 +249,11 @@
                 <ion-icon name="filter-outline"></ion-icon>
             </ion-fab-button>
         </ion-fab-list>
+    </ion-fab>
 
+    <ion-fab *ngIf="store" vertical="bottom" horizontal="end" slot="fixed">
+        <ion-fab-button (click)="listCategories()">
+            <ion-icon name="filter-outline"></ion-icon>
+        </ion-fab-button>
     </ion-fab>
 </ion-content>

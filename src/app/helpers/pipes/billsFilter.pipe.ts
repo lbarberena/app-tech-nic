@@ -18,7 +18,8 @@ export class BillsFilterPipe implements PipeTransform {
     searchText = searchText.toLocaleLowerCase();
 
     return items.filter( ( it: BillsModel ) => {
-      return it.code.toString().toLowerCase().includes( searchText );
+      return it.code.toString().toLowerCase().includes( searchText ) ||
+      it.clientName.toString().toLowerCase().includes( searchText );
     });
   }
 }

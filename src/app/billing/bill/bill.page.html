@@ -11,6 +11,11 @@
 
     <form [formGroup]="billForm">
 
+        <ion-item>
+            <ion-label position="floating">Nombre de Cliente:</ion-label>
+            <ion-input type="text" formControlName="clientName"></ion-input>
+        </ion-item>
+
         <div formArrayName="products">
             <ion-grid>
                 <ion-row>
@@ -51,11 +56,6 @@
             </ion-grid>
 
         </div>
-
-        <ion-item>
-            <ion-label position="floating">Sub Total</ion-label>
-            <ion-input readonly="readonly" type="text" formControlName="subTotal"></ion-input>
-        </ion-item>
 
         <ion-item>
             <ion-label position="floating">Total</ion-label>

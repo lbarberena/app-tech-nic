@@ -1,5 +1,19 @@
 <ion-header>
     <ion-toolbar>
+        <ion-segment [(ngModel)]="selected" [ngModelOptions]="{standalone: true}">
+            <ion-segment-button *ngIf="admin && CEO" value="all">
+                En Stock
+            </ion-segment-button>
+            <ion-segment-button *ngIf="admin && CEO" value="gone">
+                Acabados
+            </ion-segment-button>
+            <ion-segment-button *ngIf="store" value="allStore">
+                En Stock
+            </ion-segment-button>
+            <ion-segment-button *ngIf="store" value="goneStore">
+                Acabados
+            </ion-segment-button>
+        </ion-segment>
         <ion-title>Seleccione Producto</ion-title>
         <ion-buttons slot="end">
             <ion-button (click)="closeModal()">
@@ -9,11 +23,11 @@
     </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content [ngSwitch]="selected">
 
     <ion-searchbar [(ngModel)]="searchItemsInput" [ngModelOptions]="{standalone: true}" placeholder="Buscar por nombre o código"></ion-searchbar>
 
-    <div *ngIf="admin && CEO">
+    <div *ngSwitchCase="'all'">
 
         <ion-card *ngFor="let i of items | itemsFilter: searchItemsInput" (click)="dismiss( i )">
             <ion-card-header>
@@ -49,9 +63,74 @@
 
     </div>
 
-    <div *ngIf="store">
+    <div *ngSwitchCase="'gone'">
+
+        <ion-card *ngFor="let i of goneItems | itemsFilter: searchItemsInput" (click)="dismiss( i )">
+            <ion-card-header>
+                <ion-card-subtitle>Código: {{ i.code }}</ion-card-subtitle>
+                <ion-card-title>Nombre: {{ i.name }}</ion-card-title>
+            </ion-card-header>
+
+            <ion-card-content>
+                <ion-grid>
+                    <ion-row>
+                        <ion-col>
+                            <ion-label>Cantidad: {{ i.quantity }}</ion-label>
+                        </ion-col>
+                        <ion-col>
+                            <ion-label>Color: {{ i.color }}</ion-label>
+                        </ion-col>
+                    </ion-row>
+                    <ion-row>
+                        <ion-col>
+                            <ion-label>
+                                Precio: C${{ i.price }}
+                            </ion-label>
+                        </ion-col>
+                    </ion-row>
+                    <ion-row>
+                        <ion-col>
+                            <ion-label>Descripción: {{ i.description }}</ion-label>
+                        </ion-col>
+                    </ion-row>
+                </ion-grid>
+            </ion-card-content>
+        </ion-card>
+
+    </div>
+
+    <div *ngSwitchCase="'allStore'">
 
         <ion-card *ngFor="let i of itemsStore | itemsFilter: searchItemsInput" (click)="dismiss( i )">
+            <ion-card-header>
+                <ion-card-subtitle>Código: {{ i.code }}</ion-card-subtitle>
+                <ion-card-title>Nombre: {{ i.name }}</ion-card-title>
+            </ion-card-header>
+
+            <ion-card-content>
+                <ion-grid>
+                    <ion-row>
+                        <ion-col>
+                            <ion-label>Cantidad: {{ i.quantity }}</ion-label>
+                        </ion-col>
+                        <ion-col>
+                            <ion-label>Color: {{ i.color }}</ion-label>
+                        </ion-col>
+                    </ion-row>
+                    <ion-row>
+                        <ion-col>
+                            <ion-label>Descripción: {{ i.description }}</ion-label>
+                        </ion-col>
+                    </ion-row>
+                </ion-grid>
+            </ion-card-content>
+        </ion-card>
+
+    </div>
+
+    <div *ngSwitchCase="'goneStore'">
+
+        <ion-card *ngFor="let i of goneItemsStore | itemsFilter: searchItemsInput" (click)="dismiss( i )">
             <ion-card-header>
                 <ion-card-subtitle>Código: {{ i.code }}</ion-card-subtitle>
                 <ion-card-title>Nombre: {{ i.name }}</ion-card-title>

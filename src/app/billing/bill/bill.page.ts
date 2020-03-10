@@ -32,6 +32,7 @@ export class BillPage implements OnInit {
   data = [{
     _id: '',
     productName: '',
+    code: '',
     quantity: 0,
     unitCost: 0,
     price: 0
@@ -83,6 +84,7 @@ export class BillPage implements OnInit {
         let productForm = this.formBuilder.group({
           _id: e._id,
           productName: e.productName,
+          code: e.code,
           quantity: e.quantity,
           unitCost: e.unitCost,
           price: e.price
@@ -163,9 +165,10 @@ export class BillPage implements OnInit {
     return this.billForm.get('products') as FormArray;
   }
 
-  async addProducts( id: string, productId: string, name: string, Quantity: number, UnitCost: number, Price: number) {
+  async addProducts( id: string, productId: string, name: string, Quantity: number, UnitCost: number, Price: number, Code: string) {
     this.productListForm = this.formBuilder.group({
       _id: productId,
+      code: Code,
       productName: name,
       quantity: Quantity,
       unitCost: UnitCost,
@@ -228,12 +231,13 @@ export class BillPage implements OnInit {
         this.productQuantity = res.data.quantity;
         if ( res.data.quantity > 0 ) {
           this.billForm.patchValue({
+            code: res.data.code,
             productName: res.data.name,
             price: res.data.price,
             quantity: 1,
             unitCost: res.data.unitCost
           });
-          this.addProducts(data._id, res.data._id, res.data.name, 1, res.data.unitCost, res.data.price);
+          this.addProducts(data._id, res.data._id, res.data.name, 1, res.data.unitCost, res.data.price, res.data.code);
         } else {
           const TOAST = await this.toastController.create({
             duration: 3,

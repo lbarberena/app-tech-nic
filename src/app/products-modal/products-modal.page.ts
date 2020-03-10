@@ -21,11 +21,15 @@ export class ProductsModalPage {
   admin = false;
   CEO = false;
   store = false;
+  selected;
+  goneItems = [];
+  goneItemsStore = [];
 
   constructor( public modalController: ModalController,
                private itemsService: ItemsService ) { }
 
   ionViewWillEnter() {
+    this.selected = 'all';
     this.username = localStorage.getItem('user');
     this.role = localStorage.getItem('role');
     this.userId = localStorage.getItem('userId');
@@ -66,9 +70,23 @@ export class ProductsModalPage {
       });
 
       itemsCollection.forEach( e => {
+        if ( e.quantity === 0 ) {
+          this.goneItems.push(e);
+        }
+      });
+
+      itemsCollection.forEach( e => {
         if ( e.store === this.name ) {
           if ( e.quantity > 0 ) {
             this.itemsStore.push(e);
+          }
+        }
+      });
+
+      itemsCollection.forEach( e => {
+        if ( e.store === this.name ) {
+          if ( e.quantity === 0 ) {
+            this.goneItemsStore.push(e);
           }
         }
       });

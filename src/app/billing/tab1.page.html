@@ -4,7 +4,7 @@
             <ion-menu-button></ion-menu-button>
         </ion-buttons>
         <ion-segment [(ngModel)]="selected" [ngModelOptions]="{standalone: true}">
-            <ion-segment-button value="all">
+            <ion-segment-button *ngIf="admin && CEO" value="all">
                 Todas
             </ion-segment-button>
             <ion-segment-button value="mines">
@@ -45,6 +45,11 @@
                             <ion-label>{{ b.Date | date:'medium' }}</ion-label>
                         </ion-col>
                     </ion-row>
+                    <ion-row>
+                        <ion-col>
+                            <ion-label>Cliente: {{ b.clientName }}</ion-label>
+                        </ion-col>
+                    </ion-row>
                 </ion-grid>
             </ion-item>
 
@@ -82,6 +87,11 @@
                     <ion-row>
                         <ion-col>
                             <ion-label>{{ b.Date | date:'medium' }}</ion-label>
+                        </ion-col>
+                    </ion-row>
+                    <ion-row>
+                        <ion-col>
+                            <ion-label>Cliente: {{ b.clientName }}</ion-label>
                         </ion-col>
                     </ion-row>
                 </ion-grid>
