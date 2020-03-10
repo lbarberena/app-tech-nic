@@ -8,14 +8,65 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-    <ion-card>
-        <ion-card-header>
-            <ion-card-subtitle>Card Subtitle</ion-card-subtitle>
-            <ion-card-title>Card Title</ion-card-title>
-        </ion-card-header>
+    <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+        <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
 
-        <ion-card-content>
-            Keep close to Nature's heart... and break clear away, once in awhile, and climb a mountain or spend a week in the woods. Wash your spirit clean.
-        </ion-card-content>
-    </ion-card>
+    <form [formGroup]="accountingForm">
+        <ion-card>
+            <ion-card-header>
+                <ion-card-subtitle>Fecha: {{ actualDate | date:'medium' }} </ion-card-subtitle>
+                <ion-card-title>Ingresos {{ name }}</ion-card-title>
+            </ion-card-header>
+
+            <ion-card-content>
+                <ion-text>
+                    <h4>Total:
+                        <ion-input readonly="readonly" formControlName="totalIncome"></ion-input>
+                    </h4>
+                </ion-text>
+            </ion-card-content>
+        </ion-card>
+    </form>
+
+    <ion-button *ngIf="!calculated && admin" expand="full" (click)="calculateAdmin()">Calcular</ion-button>
+    <ion-button *ngIf="!calculated && CEO" expand="full" (click)="calculateCEO()">Calcular</ion-button>
+    <ion-button *ngIf="!calculated && store" expand="full" (click)="calculateStore()">Calcular</ion-button>
+    <ion-button *ngIf="calculated" color="success" expand="full" (click)="saveIncomes()">Guardar Ingresos</ion-button>
+
+    <div>
+        <ion-title>Mis Ingresos</ion-title>
+    </div>
+
+    <ion-searchbar *ngIf="(!admin && CEO) || (admin && !CEO)" [(ngModel)]="searchInput" [ngModelOptions]="{standalone: true}" placeholder="Buscar por usuarios"></ion-searchbar>
+
+    <div *ngIf="(!admin && CEO) || (admin && !CEO)">
+        <ion-card *ngFor="let a of accountings | accountingsFilter: searchInput">
+            <ion-card-header>
+                <ion-card-subtitle>Fecha: {{ a.date | date:'medium' }}</ion-card-subtitle>
+                <ion-card-title>Total: C${{ a.totalIncome | number:'1.1-2' }}</ion-card-title>
+            </ion-card-header>
+
+            <ion-card-content>
+                <ion-text>
+                    <h4>Ingresos {{ a.name }}</h4>
+                </ion-text>
+            </ion-card-content>
+        </ion-card>
+    </div>
+
+    <div *ngIf="store">
+        <ion-card *ngFor="let a of accountingsStore">
+            <ion-card-header>
+                <ion-card-subtitle>Fecha: {{ a.date | date:'medium' }}</ion-card-subtitle>
+                <ion-card-title>Total: C${{ a.totalIncome | number:'1.1-2' }}</ion-card-title>
+            </ion-card-header>
+
+            <ion-card-content>
+                <ion-text>
+                    <h4>Ingresos {{ a.name }}</h4>
+                </ion-text>
+            </ion-card-content>
+        </ion-card>
+    </div>
 </ion-content>

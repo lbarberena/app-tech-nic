@@ -1,7 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { AlertController, ToastController } from '@ionic/angular';
+import { AlertController, ToastController, Platform } from '@ionic/angular';
+
+import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
 
 import { ItemsService } from '../../services/items.service';
 import { ItemsModel } from '../../helpers/models/items.model';
@@ -13,24 +15,35 @@ import { ItemsModel } from '../../helpers/models/items.model';
 })
 export class Tab2Page {
 
-  items: ItemsModel[];
+  items = [];
+  itemsStore = [];
   username: string;
   role: string;
   userId: string;
+  name: string;
   admin = false;
+  CEO = false;
+  store = false;
   searchItemsInput;
 
   constructor( private router: Router,
                private itemsService: ItemsService,
                private alertCtrl: AlertController,
-               public toastController: ToastController ) {}
+               public toastController: ToastController,
+               private localNotifications: LocalNotifications,
+               private plt: Platform ) {
+                 /* this.plt.ready().then(() => {
+                  this.localNotifications.on('click').subscribe( res => {
 
-  @ViewChild('slidingList', {static: true}) slidingList;
+                  });
+                 }); */
+               }
 
   ionViewWillEnter() {
     this.username = localStorage.getItem('user');
     this.role = localStorage.getItem('role');
     this.userId = localStorage.getItem('userId');
+    this.name = localStorage.getItem('name');
     this.roles();
     this.GET();
   }
@@ -38,13 +51,29 @@ export class Tab2Page {
   roles() {
     if ( (this.role === 'Admin') || (this.role === 'CEO') ) {
       this.admin = true;
+      this.CEO = true;
+    } else if ( (this.role === 'Vendedor') || (this.role === 'Tienda') ) {
+      this.store = true;
+      this.admin = false;
+      this.CEO = false;
     }
   }
 
   async GET() {
     await this.itemsService.GET().subscribe( async res => {
       const itemsCollection: ItemsModel[] = (await res.data);
-      this.items = itemsCollection;
+
+      itemsCollection.forEach( e => {
+        if ( e.quantity > 0 ) {
+          this.items.push(e);
+        }
+      });
+
+      itemsCollection.forEach( e => {
+        if ( e.store === this.name ) {
+          this.itemsStore.push(e);
+        }
+      });
     });
   }
 
@@ -61,7 +90,6 @@ export class Tab2Page {
   }
 
   async edit( itemId: string ) {
-    await this.slidingList.closeSlidingItems();
     this.router.navigateByUrl(`/admin-items/${ itemId }`);
   }
 

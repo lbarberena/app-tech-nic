@@ -1,12 +1,15 @@
-import { IonicModule } from '@ionic/angular';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ItemsFilterPipe } from './itemsFilter.pipe';
 import { RouterModule } from '@angular/router';
-import { StoresFilterPipe } from './storesFilter.pipe';
+
+import { IonicModule } from '@ionic/angular';
+
+import { AccountingsFilterPipe } from './accountingsFilter.pipe';
 import { AccountsFilterPipe } from './accountsFilter.pipe';
 import { BillsFilterPipe } from './billsFilter.pipe';
 import { CategoriesFilterPipe } from './categoriesFilter.pipe';
+import { ItemsFilterPipe } from './itemsFilter.pipe';
+import { StoresFilterPipe } from './storesFilter.pipe';
 
 
 
@@ -16,7 +19,8 @@ import { CategoriesFilterPipe } from './categoriesFilter.pipe';
     AccountsFilterPipe,
     BillsFilterPipe,
     ItemsFilterPipe,
-    CategoriesFilterPipe
+    CategoriesFilterPipe,
+    AccountingsFilterPipe
 ],
   imports: [
     CommonModule,
@@ -28,6 +32,7 @@ import { CategoriesFilterPipe } from './categoriesFilter.pipe';
     AccountsFilterPipe,
     BillsFilterPipe,
     ItemsFilterPipe,
+    AccountingsFilterPipe,
     CategoriesFilterPipe
 ]
 })

@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+
 import { ModalController } from '@ionic/angular';
-import { ItemsModel } from '../helpers/models/items.model';
+
 import { ItemsService } from '../services/items.service';
+import { ItemsModel } from '../helpers/models/items.model';
 
 @Component({
   selector: 'app-products-modal',
@@ -9,14 +11,36 @@ import { ItemsService } from '../services/items.service';
   styleUrls: ['./products-modal.page.scss'],
 })
 export class ProductsModalPage {
-  items: ItemsModel[];
+  items = [];
   searchItemsInput;
+  itemsStore = [];
+  username: string;
+  role: string;
+  userId: string;
+  name: string;
+  admin = false;
+  CEO = false;
+  store = false;
 
   constructor( public modalController: ModalController,
                private itemsService: ItemsService ) { }
 
   ionViewWillEnter() {
+    this.username = localStorage.getItem('user');
+    this.role = localStorage.getItem('role');
+    this.userId = localStorage.getItem('userId');
+    this.name = localStorage.getItem('name');
+    this.roles();
     this.GET();
+  }
+
+  roles() {
+    if ( (this.role === 'Admin') || (this.role === 'CEO') ) {
+      this.admin = true;
+      this.CEO = true;
+    } else if ( (this.role === 'Vendedor') || (this.role === 'Tienda') ) {
+      this.store = true;
+    }
   }
 
   dismiss( Data: any ) {
@@ -34,7 +58,20 @@ export class ProductsModalPage {
   async GET() {
     await this.itemsService.GET().subscribe( async res => {
       const itemsCollection: ItemsModel[] = (await res.data);
-      this.items = itemsCollection;
+
+      itemsCollection.forEach( e => {
+        if ( e.quantity > 0 ) {
+          this.items.push(e);
+        }
+      });
+
+      itemsCollection.forEach( e => {
+        if ( e.store === this.name ) {
+          if ( e.quantity > 0 ) {
+            this.itemsStore.push(e);
+          }
+        }
+      });
     });
   }
 

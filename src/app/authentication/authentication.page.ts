@@ -44,6 +44,7 @@ export class AuthenticationPage implements OnInit {
         localStorage.setItem('role', res.data.role);
         localStorage.setItem('user', res.data.username);
         localStorage.setItem('userId', res.data.userId);
+        localStorage.setItem('name', res.data.name);
         const TOAST = await this.toastController.create({
           duration: 3,
           message: res.msj

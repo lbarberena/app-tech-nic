@@ -21,6 +21,7 @@ export class Tab1Page {
   selected;
   admin = false;
   role = '';
+  userId = '';
 
   constructor( private billsService: BillsService,
                private router: Router,
@@ -28,14 +29,13 @@ export class Tab1Page {
                private alertCtrl: AlertController,
                private itemsService: ItemsService ) {}
 
-  @ViewChild('slidingList', {static: true}) slidingList;
-  @ViewChild('SlidingList', {static: true}) SlidingList;
-
   ionViewWillEnter() {
     this.selected = 'all';
     this.username = localStorage.getItem('user');
     this.role = localStorage.getItem('role');
+    this.userId = localStorage.getItem('userId');
     this.roles();
+    this.myBills = [];
     this.GET();
   }
 
@@ -59,7 +59,7 @@ export class Tab1Page {
       this.bills = billsCollection;
 
       this.bills.forEach( e => {
-        if ( e.username === this.username ) {
+        if ( e.userId === this.userId ) {
           this.myBills.push( e );
         }
       });
@@ -67,8 +67,6 @@ export class Tab1Page {
   }
 
   async edit( billId: string ) {
-    // await this.slidingList.closeSlidingItems();
-    // await this.SlidingList.closeSlidingItems();
     this.router.navigateByUrl(`/bill/${ billId }`);
   }
 

@@ -5,4 +5,6 @@ export interface AccountingsModel {
     totalExpends: number;
     totalIncome: number;
     balance: number;
+    userId: string;
+    name: string;
   }

@@ -5,6 +5,7 @@ export interface AuthResponseModel {
       token: string,
       userId: string,
       username: string,
+      name: string;
       role: string,
       expireTime: string
     };

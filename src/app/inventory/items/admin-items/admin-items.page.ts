@@ -7,6 +7,8 @@ import { ToastController } from '@ionic/angular';
 import { CategoriesModel } from 'src/app/helpers/models/categories.model';
 import { ItemsService } from 'src/app/services/items.service';
 import { CategoriesService } from 'src/app/services/categories.service';
+import { StoresModel } from 'src/app/helpers/models/stores.model';
+import { StoresService } from 'src/app/services/stores.service';
 
 @Component({
   selector: 'app-admin-items',
@@ -15,6 +17,7 @@ import { CategoriesService } from 'src/app/services/categories.service';
 })
 export class AdminItemsPage implements OnInit {
   title = '';
+  btnName = '';
   ID: string;
   newItem: FormGroup;
   categories: CategoriesModel[];
@@ -22,25 +25,30 @@ export class AdminItemsPage implements OnInit {
   username: string;
   role: string;
   userId: string;
+  stores: StoresModel[];
 
   constructor( private route: ActivatedRoute,
                private router: Router,
                private formBuilder: FormBuilder,
                private itemsService: ItemsService,
                private categoriesService: CategoriesService,
-               public toastController: ToastController ) { }
+               public toastController: ToastController,
+               private storesService: StoresService ) { }
 
   ngOnInit() {
     this.username = localStorage.getItem('user');
     this.role = localStorage.getItem('role');
     this.userId = localStorage.getItem('userId');
     this.GetCategories();
+    this.GetStores();
     this.ID = this.route.snapshot.paramMap.get('id');
     if ( this.ID ) {
       this.title = 'Editar Producto';
+      this.btnName = 'Actualizar Producto';
       this.GetById( this.ID );
     } else {
       this.title = 'Nuevo Producto';
+      this.btnName = 'Guardar Producto';
     }
     this.newItem = this.formBuilder.group({
       code: ['', Validators.required],
@@ -84,6 +92,13 @@ export class AdminItemsPage implements OnInit {
     await this.categoriesService.GET().subscribe( async res => {
       const categoriesCollection: CategoriesModel[] = (await res.data);
       this.categories = categoriesCollection;
+    });
+  }
+
+  async GetStores() {
+    await this.storesService.GET().subscribe( async res => {
+      const storesCollection: StoresModel[] = (await res.data);
+      this.stores = storesCollection;
     });
   }
 
