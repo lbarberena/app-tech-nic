@@ -19,11 +19,11 @@
             <ion-input type="text" formControlName="username"></ion-input>
         </ion-item>
 
-        <ion-item>
+        <ion-item *ngIf="!changePassword || !id">
             <ion-label position="floating">Contraseña</ion-label>
             <ion-input type="password" formControlName="password"></ion-input>
         </ion-item>
-        <ion-item *ngIf="id && registerForm.controls['password'].touched">
+        <ion-item *ngIf="(id && registerForm.controls['password'].touched) || (!changePassword && id)">
             <ion-label position="floating">Confirmar Contraseña</ion-label>
             <ion-input type="password" [(ngModel)]="confirmPassword" [ngModelOptions]="{standalone: true}"></ion-input>
         </ion-item>
@@ -42,6 +42,7 @@
             </ion-select>
         </ion-item>
 
+        <ion-button *ngIf="changePassword" expand="full" (click)="btnChangePassword()">Cambiar Contraseña</ion-button>
         <ion-button expand="full" type="submit" [disabled]="!registerForm.valid">{{ btnText }}</ion-button>
     </form>
 </ion-content>

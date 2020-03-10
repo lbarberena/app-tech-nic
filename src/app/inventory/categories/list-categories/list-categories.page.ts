@@ -1,8 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { CategoriesService } from 'src/app/services/categories.service';
-import { ToastController, AlertController } from '@ionic/angular';
+import { ToastController, AlertController, ModalController } from '@ionic/angular';
 import { CategoriesModel } from 'src/app/helpers/models/categories.model';
 import { Router } from '@angular/router';
+import { ProductsCategoryModalPage } from 'src/app/products-category-modal/products-category-modal.page';
 
 @Component({
   selector: 'app-list-categories',
@@ -19,7 +20,8 @@ export class ListCategoriesPage {
   constructor( private categoriesService: CategoriesService,
                public toastController: ToastController,
                private router: Router,
-               private alertCtrl: AlertController ) { }
+               private alertCtrl: AlertController,
+               public modalController: ModalController ) { }
 
   @ViewChild('slidingList', {static: true}) slidingList;
 
@@ -91,6 +93,15 @@ export class ListCategoriesPage {
     setTimeout(() => {
       event.target.complete();
     }, 2000);
+  }
+
+  async presentModal( name: string ) {
+    localStorage.setItem('categoryName', name);
+    const modal = await this.modalController.create({
+      component: ProductsCategoryModalPage
+    });
+
+    return await modal.present();
   }
 
 }

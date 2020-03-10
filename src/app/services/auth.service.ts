@@ -53,7 +53,7 @@ export class AuthService {
     );
   }
 
-  password(user: AuthModel): Observable<any> {
+  password( user: any ): Observable<any> {
     return this.http.put<GenericResponseModel>(`${this.url}/password`, user).pipe(
       retry( 1 ),
       catchError( this.errorService.handleError )

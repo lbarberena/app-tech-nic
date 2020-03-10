@@ -11,14 +11,15 @@
 
     <ion-searchbar [(ngModel)]="searchInput" [ngModelOptions]="{standalone: true}" placeholder="Buscar por nombre"></ion-searchbar>
 
+    <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+        <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
+
     <ion-list #slidingList>
 
         <ion-item-sliding *ngFor="let c of categories | categoriesFilter: searchInput">
-            <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
-                <ion-refresher-content></ion-refresher-content>
-            </ion-refresher>
 
-            <ion-item>
+            <ion-item (click)="presentModal( c.categoryName )">
                 <ion-grid>
                     <ion-row>
                         <ion-col>
@@ -35,15 +36,12 @@
                 </ion-grid>
             </ion-item>
 
-            <ion-item-options side="start">
-                <ion-item-option (click)="edit( c._id )" color="tertiary">
-                    <ion-icon name="create" slot="icon-only"></ion-icon>
-                </ion-item-option>
-            </ion-item-options>
-
-            <ion-item-options side="end">
+            <ion-item-options *ngIf="admin" side="end">
                 <ion-item-option (click)="erease( c._id )" color="danger">
                     <ion-icon name="close" slot="icon-only"></ion-icon>
+                </ion-item-option>
+                <ion-item-option (click)="edit( c._id )" color="tertiary">
+                    <ion-icon name="create" slot="icon-only"></ion-icon>
                 </ion-item-option>
             </ion-item-options>
 

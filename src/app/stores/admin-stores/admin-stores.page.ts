@@ -55,22 +55,41 @@ export class AdminStoresPage implements OnInit {
   async SAVE() {
     const form: any = this.newStore.value;
 
-    this.storesService.POST(form).subscribe( async res => {
-      if ( res.success ) {
-        const TOAST = await this.toastController.create({
-          duration: 3,
-          message: res.msj
-        });
-        TOAST.present();
-        this.cancel();
-      } else {
-        const TOAST = await this.toastController.create({
-          duration: 3,
-          message: res.msj
-        });
-        TOAST.present();
-      }
-    });
+    if ( !this.ID ) {
+      this.storesService.POST(form).subscribe( async res => {
+        if ( res.success ) {
+          const TOAST = await this.toastController.create({
+            duration: 3,
+            message: res.msj
+          });
+          TOAST.present();
+          this.cancel();
+        } else {
+          const TOAST = await this.toastController.create({
+            duration: 3,
+            message: res.msj
+          });
+          TOAST.present();
+        }
+      });
+    } else if ( this.ID ) {
+      this.storesService.PUT( this.ID, form ).subscribe( async res => {
+        if ( res.success ) {
+          const TOAST = await this.toastController.create({
+            duration: 3,
+            message: res.msj
+          });
+          TOAST.present();
+          this.cancel();
+        } else {
+          const TOAST = await this.toastController.create({
+            duration: 3,
+            message: res.msj
+          });
+          TOAST.present();
+        }
+      });
+    }
 
   }
 

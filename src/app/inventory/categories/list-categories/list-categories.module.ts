@@ -8,6 +8,7 @@ import { ListCategoriesPageRoutingModule } from './list-categories-routing.modul
 
 import { ListCategoriesPage } from './list-categories.page';
 import { PipesModule } from 'src/app/helpers/pipes/pipes.module';
+import { ProductsCategoryModalPageModule } from 'src/app/products-category-modal/products-category-modal.module';
 
 @NgModule({
   imports: [
@@ -15,7 +16,8 @@ import { PipesModule } from 'src/app/helpers/pipes/pipes.module';
     FormsModule,
     IonicModule,
     PipesModule,
-    ListCategoriesPageRoutingModule
+    ListCategoriesPageRoutingModule,
+    ProductsCategoryModalPageModule
   ],
   declarations: [ListCategoriesPage]
 })

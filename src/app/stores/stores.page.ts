@@ -80,6 +80,7 @@ export class StoresPage {
     setTimeout(() => {
       event.target.complete();
     }, 2000);
+    this.stores = [];
     this.GET();
   }
 

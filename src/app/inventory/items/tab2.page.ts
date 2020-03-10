@@ -97,6 +97,8 @@ export class Tab2Page {
     setTimeout(() => {
       event.target.complete();
     }, 2000);
+    this.items = [];
+    this.itemsStore = [];
     this.GET();
   }
 

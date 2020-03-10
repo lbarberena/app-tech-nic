@@ -17,6 +17,7 @@ export class RegisterPage implements OnInit {
   title = '';
   id = false;
   btnText = '';
+  changePassword = true;
 
   constructor( private authService: AuthService,
                private router: Router,
@@ -77,14 +78,39 @@ export class RegisterPage implements OnInit {
           }
         });
       } else if ( this.ID ) {
-        if ( !this.confirmPassword ) {
+        if ( !this.confirmPassword && !this.changePassword ) {
           const TOAST = await this.toastController.create({
             duration: 3,
             message: 'Debes confirmar la contraseña'
           });
           TOAST.present();
-        } else if ( this.confirmPassword === this.registerForm.value.password ) {
-          this.authService.PUT(this.ID, form ).subscribe( async res => {
+        } else if ( (this.confirmPassword === this.registerForm.value.password) && !this.changePassword ) {
+          const data = {
+            username: this.registerForm.value.username,
+            name: this.registerForm.value.name,
+            role: this.registerForm.value.role,
+            email: this.registerForm.value.email
+          };
+          this.authService.PUT(this.ID, data ).subscribe( async res => {
+            if ( res.success ) {
+                const TOAST = await this.toastController.create({
+                    duration: 3,
+                    message: res.msj
+                  });
+                TOAST.present();
+            } else {
+                const TOAST = await this.toastController.create({
+                    duration: 3,
+                    message: res.msj
+                  });
+                TOAST.present();
+            }
+          });
+          const passwordData = {
+            username: this.registerForm.value.username,
+            password: this.registerForm.value.password
+          };
+          this.authService.password( passwordData ).subscribe( async res => {
             if ( res.success ) {
                 const TOAST = await this.toastController.create({
                     duration: 3,
@@ -100,14 +126,41 @@ export class RegisterPage implements OnInit {
                 TOAST.present();
             }
           });
-        } else {
+        } else if ((this.confirmPassword !== this.registerForm.value.password) && !this.changePassword) {
           const TOAST = await this.toastController.create({
             duration: 3,
             message: 'Las contraseñas no coinciden'
           });
           TOAST.present();
+        } else if ( this.id && this.ID && this.changePassword ) {
+          const data = {
+            username: this.registerForm.value.username,
+            name: this.registerForm.value.name,
+            role: this.registerForm.value.role,
+            email: this.registerForm.value.email
+          };
+          this.authService.PUT(this.ID, data ).subscribe( async res => {
+            if ( res.success ) {
+                const TOAST = await this.toastController.create({
+                    duration: 3,
+                    message: res.msj
+                  });
+                TOAST.present();
+                this.router.navigateByUrl('/accounts');
+            } else {
+                const TOAST = await this.toastController.create({
+                    duration: 3,
+                    message: res.msj
+                  });
+                TOAST.present();
+            }
+          });
         }
       }
+  }
+
+  btnChangePassword() {
+    this.changePassword = false;
   }
 
 }

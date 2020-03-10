@@ -35,7 +35,7 @@
     <ion-button *ngIf="calculated" color="success" expand="full" (click)="saveIncomes()">Guardar Ingresos</ion-button>
 
     <div>
-        <ion-title>Mis Ingresos</ion-title>
+        <ion-title slot="center">Mis Ingresos</ion-title>
     </div>
 
     <ion-searchbar *ngIf="(!admin && CEO) || (admin && !CEO)" [(ngModel)]="searchInput" [ngModelOptions]="{standalone: true}" placeholder="Buscar por usuarios"></ion-searchbar>
