@@ -4,6 +4,8 @@ import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 
 import { ToastController, AlertController, ModalController } from '@ionic/angular';
 
+import { EmailComposer } from '@ionic-native/email-composer/ngx';
+
 import { BillsService } from 'src/app/services/bills.service';
 import { ItemsModel } from 'src/app/helpers/models/items.model';
 import { ItemsService } from 'src/app/services/items.service';
@@ -39,6 +41,9 @@ export class BillPage implements OnInit {
   }];
 
   btnBill = '';
+  id = false;
+  emailProducts = [];
+  emailInpunt;
   constructor( private route: ActivatedRoute,
                private itemsService: ItemsService,
                private formBuilder: FormBuilder,
@@ -46,7 +51,8 @@ export class BillPage implements OnInit {
                public toastController: ToastController,
                private alertCtrl: AlertController,
                public modalController: ModalController,
-               private router: Router ) { }
+               private router: Router,
+               private emailComposer: EmailComposer ) { }
 
   ngOnInit() {
     this.billForm = this.formBuilder.group({
@@ -58,7 +64,8 @@ export class BillPage implements OnInit {
       subTotal: ['', Validators.required],
       total: ['', Validators.required],
       Date: [this.actualDate],
-      month: [this.actualMonth]
+      month: [this.actualMonth],
+      clientEmail: ['']
     });
   }
 
@@ -68,20 +75,52 @@ export class BillPage implements OnInit {
     this.userId = localStorage.getItem('userId');
     this.ID = this.route.snapshot.paramMap.get('id');
     if ( this.ID ) {
+      this.id = true;
       this.title = 'Editar Factura';
       this.GetBillById(this.ID);
       this.btnBill = 'Editar Factura';
     } else {
+      this.id = false;
       this.title = 'Nueva Factura';
       this.btnBill = 'Facturar';
     }
+  }
+
+  sendEmail(ClientName: string, Code: string, Total: number, EmailInpunt: string) {
+    let productName = [];
+    let productQuantity = [];
+    let productCode = [];
+    this.emailProducts = this.productsForm.value;
+    console.log(this.emailProducts);
+    this.emailProducts.forEach( e => {
+      productCode.push(e.code);
+      productName.push(e.productName);
+      productQuantity.push(e.quantity);
+    });
+    const email = {
+      to: `${ EmailInpunt }`,
+      cc: 'djscreem007@gmail.com',
+      from: 'technicaragua1@gmail.com',
+      subject: `Factura ${ Code } Tech Nic`,
+      body: `Tech Nic Accessories and more <br><br>
+      Código de factura: ${ Code } <br><br>
+      Cliente: ${ ClientName } <br><br>
+      Productos: <br><br>
+      <table>
+      <thead><tr><th>Código</th>   <th>Cantidad</th>   <th>Nombre</th></tr></thead>
+      <tbody><tr><td>${ productCode }</td>  <td>${ productQuantity }</td>  <td>${ productName }</td></tr></tbody> <br><br></table>
+      Total Factura: <strong>C$${ Total }</strong> <br><br>
+      Gracias por tu compra!`,
+      isHtml: true
+    };
+    this.emailComposer.open(email);
   }
 
   GetBillById( id: string ) {
     this.billService.GetByID( id ).subscribe( async res => {
       this.data = res.data.products;
       this.data.forEach( e => {
-        let productForm = this.formBuilder.group({
+        const productForm = this.formBuilder.group({
           _id: e._id,
           productName: e.productName,
           code: e.code,
@@ -147,6 +186,7 @@ export class BillPage implements OnInit {
               message: res.msj
             });
             TOAST.present();
+            this.sendEmail(res.data.clientName, res.data.code, res.data.total, res.data.clientEmail);
             this.router.navigateByUrl('/tabs/billing');
             this.products = [];
           } else {

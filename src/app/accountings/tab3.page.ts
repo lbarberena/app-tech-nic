@@ -100,8 +100,8 @@ export class Tab3Page implements OnInit {
 
   GET() {
     this.accountingService.GET().subscribe( async res => {
-      const accountigsCollection = ( await res.data );
-      this.accountings = accountigsCollection;
+      const accountigsCollection: AccountingsModel[] = ( await res.data );
+      this.accountings = accountigsCollection.reverse();
 
       this.accountings.forEach( e => {
         if ( e.userId === this.userId ) {

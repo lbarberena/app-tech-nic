@@ -2,8 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { ToastController, AlertController } from '@ionic/angular';
-import { OrdersModel } from '../helpers/models/orders.model';
+
 import { OrdersService } from '../services/orders.service';
+import { OrdersModel } from '../helpers/models/orders.model';
 
 @Component({
   selector: 'app-orders',
@@ -66,15 +67,15 @@ export class OrdersPage implements OnInit {
   async GET() {
     await this.ordersService.GET().subscribe( async res => {
       const ordersCollection: OrdersModel[] = (await res.data);
-      this.orders = ordersCollection;
+      this.orders = ordersCollection.reverse();
 
-      ordersCollection.forEach( e => {
+      this.orders.forEach( e => {
         if ( e.store === this.name ) {
           this.storeOrders.push(e);
         }
       });
 
-      ordersCollection.forEach( e => {
+      this.orders.forEach( e => {
         if ( e.userId === this.userId ) {
           this.myOrders.push(e);
         }

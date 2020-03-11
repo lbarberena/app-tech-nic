@@ -22,6 +22,9 @@ export class Tab1Page {
   admin = false;
   role = '';
   userId = '';
+  CEO = false;
+  store = false;
+  myBillsReverse = [];
 
   constructor( private billsService: BillsService,
                private router: Router,
@@ -50,13 +53,19 @@ export class Tab1Page {
   roles() {
     if ( (this.role === 'Admin') || (this.role === 'CEO') ) {
       this.admin = true;
+      this.CEO = true;
+      this.store = false;
+    } else if ( (this.role === 'Tienda') || (this.role === 'Vendedor') ) {
+      this.admin = false;
+      this.CEO = false;
+      this.store = true;
     }
   }
 
   GET() {
     this.billsService.GET().subscribe( async res => {
       const billsCollection: BillsModel[] = (await res.data);
-      this.bills = billsCollection;
+      this.bills = billsCollection.reverse();
 
       this.bills.forEach( e => {
         if ( e.userId === this.userId ) {
