@@ -186,7 +186,7 @@ export class BillPage implements OnInit {
               message: res.msj
             });
             TOAST.present();
-            this.sendEmail(res.data.clientName, res.data.code, res.data.total, res.data.clientEmail);
+            this.askForEmail(res.data.clientName, res.data.code, res.data.total, res.data.clientEmail);
             this.router.navigateByUrl('/tabs/billing');
             this.products = [];
           } else {
@@ -365,6 +365,25 @@ async cancel() {
   } else {
     return;
   }
+}
+
+async askForEmail(ClientName: string, Code: string, Total: number, EmailInpunt: string) {
+  const alert = await this.alertCtrl.create({
+    header: '¿Desea enviar factura?',
+    buttons: [
+      {
+        text: 'Confirmar',
+        handler: ( data ) => {
+          this.sendEmail(ClientName, Code, Total, EmailInpunt);
+        }
+      },
+      {
+        text: 'Cancelar',
+        role: 'cancel'
+      }
+    ]
+  });
+  alert.present();
 }
 
 }
