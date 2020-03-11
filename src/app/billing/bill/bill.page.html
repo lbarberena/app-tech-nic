@@ -18,10 +18,6 @@
             <ion-label position="floating">Nombre de Cliente:</ion-label>
             <ion-input type="text" formControlName="clientName"></ion-input>
         </ion-item>
-        <ion-item>
-            <ion-label position="floating">Correo del Cliente:</ion-label>
-            <ion-input type="email" formControlName="clientEmail"></ion-input>
-        </ion-item>
 
         <div formArrayName="products">
             <ion-grid>
@@ -69,7 +65,7 @@
             <ion-input readonly="readonly" type="text" formControlName="total"></ion-input>
         </ion-item>
 
-        <ion-button expand="full" type="submit" [disabled]="!billForm.valid" (click)="SAVE()">{{ btnBill }}</ion-button>
+        <ion-button expand="full" type="submit" [disabled]="!billForm.valid" (click)="askForEmail()">{{ btnBill }}</ion-button>
     </form>
 
 </ion-content>

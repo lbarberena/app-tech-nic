@@ -91,7 +91,6 @@ export class BillPage implements OnInit {
     let productQuantity = [];
     let productCode = [];
     this.emailProducts = this.productsForm.value;
-    console.log(this.emailProducts);
     this.emailProducts.forEach( e => {
       productCode.push(e.code);
       productName.push(e.productName);
@@ -129,6 +128,7 @@ export class BillPage implements OnInit {
           price: e.price
         });
         this.productsForm.push(productForm);
+        this.products.push(productForm);
       });
 
       this.billForm.patchValue({
@@ -147,30 +147,38 @@ export class BillPage implements OnInit {
     });
   }
 
-  async SAVE() {
+  async SAVE(email: string) {
     this.billForm.patchValue({
       username: this.username,
       userId: this.userId
     });
     const bill = this.billForm.value;
     if (this.ID ) {
-      this.billService.PUT(this.ID, bill ).subscribe( async res => {
-        if ( res.success ) {
-          const TOAST = await this.toastController.create({
-            duration: 3,
-            message: res.msj
-          });
-          TOAST.present();
-          this.router.navigateByUrl('/tabs/billing');
-          this.products = [];
-        } else {
-          const TOAST = await this.toastController.create({
-            duration: 3,
-            message: res.msj
-          });
-          TOAST.present();
-        }
-      });
+      if ( this.products.length === 0 ) {
+        const TOAST = await this.toastController.create({
+          duration: 3,
+          message: 'Selecciona Productos'
+        });
+        TOAST.present();
+      } else {
+        this.billService.PUT(this.ID, bill ).subscribe( async res => {
+          if ( res.success ) {
+            const TOAST = await this.toastController.create({
+              duration: 3,
+              message: res.msj
+            });
+            TOAST.present();
+            this.router.navigateByUrl('/tabs/billing');
+            this.products = [];
+          } else {
+            const TOAST = await this.toastController.create({
+              duration: 3,
+              message: res.msj
+            });
+            TOAST.present();
+          }
+        });
+      }
     } else {
       if ( this.products.length === 0 ) {
         const TOAST = await this.toastController.create({
@@ -179,14 +187,18 @@ export class BillPage implements OnInit {
         });
         TOAST.present();
       } else {
-        this.billService.POST( bill ).subscribe( async res => {
+        this.billForm.patchValue({
+          clientEmail: email
+        });
+        const form = this.billForm.value;
+        this.billService.POST( form ).subscribe( async res => {
           if ( res.success ) {
             const TOAST = await this.toastController.create({
               duration: 3,
               message: res.msj
             });
             TOAST.present();
-            this.askForEmail(res.data.clientName, res.data.code, res.data.total, res.data.clientEmail);
+            this.sendEmail(res.data.clientName, res.data.code, res.data.total, email);
             this.router.navigateByUrl('/tabs/billing');
             this.products = [];
           } else {
@@ -367,19 +379,29 @@ async cancel() {
   }
 }
 
-async askForEmail(ClientName: string, Code: string, Total: number, EmailInpunt: string) {
+async askForEmail() {
   const alert = await this.alertCtrl.create({
     header: '¿Desea enviar factura?',
+    inputs: [
+      {
+        name: 'email',
+        type: 'email',
+        placeholder: 'Correo del cliente'
+      }
+    ],
     buttons: [
       {
         text: 'Confirmar',
         handler: ( data ) => {
-          this.sendEmail(ClientName, Code, Total, EmailInpunt);
+          this.SAVE(data.email);
         }
       },
       {
         text: 'Cancelar',
-        role: 'cancel'
+        role: 'cancel',
+        handler: ( data ) => {
+          this.SAVE('');
+        }
       }
     ]
   });
