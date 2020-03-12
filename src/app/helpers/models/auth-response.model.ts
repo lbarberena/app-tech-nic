@@ -7,6 +7,7 @@ export interface AuthResponseModel {
       username: string,
       name: string;
       role: string,
-      expireTime: string
+      authenticationNumber: number;
+      fingerPrintToken: string;
     };
   }

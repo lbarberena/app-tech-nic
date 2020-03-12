@@ -105,10 +105,10 @@ export class BillPage implements OnInit {
       Código de factura: ${ Code } <br><br>
       Cliente: ${ ClientName } <br><br>
       Productos: <br><br>
-      <table>
-      <thead><tr><th>Código</th>   <th>Cantidad</th>   <th>Nombre</th></tr></thead>
-      <tbody><tr><td>${ productCode }</td>  <td>${ productQuantity }</td>  <td>${ productName }</td></tr></tbody> <br><br></table>
-      Total Factura: <strong>C$${ Total }</strong> <br><br>
+      Código: ${ productCode }<br>
+      Cantidad: ${ productQuantity }<br>
+      Nombre: ${ productName }<br><br>
+      Total Factura: C$${ Total }<br><br>
       Gracias por tu compra!`,
       isHtml: true
     };
@@ -152,7 +152,6 @@ export class BillPage implements OnInit {
       username: this.username,
       userId: this.userId
     });
-    const bill = this.billForm.value;
     if (this.ID ) {
       if ( this.products.length === 0 ) {
         const TOAST = await this.toastController.create({
@@ -161,13 +160,18 @@ export class BillPage implements OnInit {
         });
         TOAST.present();
       } else {
-        this.billService.PUT(this.ID, bill ).subscribe( async res => {
+        this.billForm.patchValue({
+          clientEmail: email
+        });
+        const form = this.billForm.value;
+        this.billService.PUT(this.ID, form ).subscribe( async res => {
           if ( res.success ) {
             const TOAST = await this.toastController.create({
               duration: 3,
               message: res.msj
             });
             TOAST.present();
+            this.sendEmail(res.data.clientName, res.data.code, res.data.total, email);
             this.router.navigateByUrl('/tabs/billing');
             this.products = [];
           } else {
@@ -317,7 +321,6 @@ export class BillPage implements OnInit {
 
       });
     } else {
-      SubTotal = this.billForm.value.total;
       this.products.forEach( e => {
         SubTotal = SubTotal + (e.value.price * e.value.quantity);
         const Total = SubTotal;

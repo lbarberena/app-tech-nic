@@ -25,9 +25,9 @@
             <ion-list>
                 <ion-item routerLink="/tabs/billing" (click)="closeMenu()">
                     <ion-icon name="home-outline"></ion-icon>Inicio</ion-item>
-                <ion-item *ngIf="admin" routerLink="/register" (click)="closeMenu()">
+                <ion-item *ngIf="(admin) || (CEO)" routerLink="/register" (click)="closeMenu()">
                     <ion-icon name="person-outline"></ion-icon>Registrar Usuarios</ion-item>
-                <ion-item *ngIf="admin" routerLink="/stores" (click)="closeMenu()">
+                <ion-item *ngIf="(admin) || (CEO)" routerLink="/stores" (click)="closeMenu()">
                     <ion-icon name="cart-outline"></ion-icon>Tiendas</ion-item>
                 <ion-item routerLink="/tabs/accountings" (click)="closeMenu()">
                     <ion-icon name="bar-chart-outline"></ion-icon>Ingresos</ion-item>

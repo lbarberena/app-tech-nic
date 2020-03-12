@@ -23,6 +23,7 @@ import { AuthenticationPage } from './authentication/authentication.page';
 import { RegisterPage } from './authentication/register.page';
 import { AuthService } from './services/auth.service';
 import { ErrorService } from './services/error.service';
+import { FingerprintAIO } from '@ionic-native/fingerprint-aio/ngx';
 
 export function tokenGetterFactory() {
   return localStorage.getItem('auth-token');
@@ -60,7 +61,8 @@ export function tokenGetterFactory() {
     AuthService,
     LocalNotifications,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    EmailComposer
+    EmailComposer,
+    FingerprintAIO
   ],
   bootstrap: [AppComponent]
 })

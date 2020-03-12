@@ -18,6 +18,7 @@ export class AppComponent {
   token = '';
   rootPage;
   admin = false;
+  CEO = false;
   role = '';
   name = '';
   username = '';
@@ -45,10 +46,18 @@ export class AppComponent {
     });
   }
 
+  ionViewWillEnter() {
+    this.roles();
+  }
+
   roles() {
     this.role = localStorage.getItem('role');
-    if ( (this.role === 'Admin') || (this.role === 'CEO') ) {
+    if ( (this.role === 'Admin') ) {
       this.admin = true;
+      this.CEO = false;
+    } else if ( (this.role === 'CEO') ) {
+      this.admin = false;
+      this.CEO = true;
     }
   }
 
@@ -63,6 +72,7 @@ export class AppComponent {
             localStorage.removeItem('user');
             localStorage.removeItem('role');
             localStorage.removeItem('userId');
+            localStorage.removeItem('name');
             this.closeMenu();
             this.router.navigateByUrl('/authentication');
           }
