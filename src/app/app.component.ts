@@ -6,8 +6,8 @@ import { Platform, AlertController, MenuController } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 
-import { AuthenticationPage } from './authentication/authentication.page';
-import { Tab1Page } from './billing/tab1.page';
+import { AuthenticationPage } from './pages/authentication/authentication.page';
+import { Tab1Page } from './pages/billing/tab1.page';
 
 @Component({
   selector: 'app-root',
