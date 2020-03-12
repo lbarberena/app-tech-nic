@@ -3,10 +3,12 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 
 import { ToastController, AlertController, ModalController } from '@ionic/angular';
+
 import { ProductsModalPage } from 'src/app/modals/products-modal/products-modal.page';
 import { OrdersService } from 'src/app/services/orders.service';
 import { ItemsService } from 'src/app/services/items.service';
 import { NewOrderModalPage } from 'src/app/modals/new-order-modal/new-order-modal.page';
+import { NotificationsService } from 'src/app/services/notifications.service';
 
 @Component({
   selector: 'app-admin-orders',
@@ -35,6 +37,7 @@ export class AdminOrdersPage implements OnInit {
     get: false
   }];
   name: string;
+  notificationForm: FormGroup;
 
   constructor( public toastController: ToastController,
                private alertCtrl: AlertController,
@@ -43,7 +46,8 @@ export class AdminOrdersPage implements OnInit {
                private route: ActivatedRoute,
                private formBuilder: FormBuilder,
                private orderService: OrdersService,
-               private itemService: ItemsService ) { }
+               private itemService: ItemsService,
+               private notificationService: NotificationsService ) { }
 
   ngOnInit() {
     this.userId = localStorage.getItem('userId');
@@ -58,6 +62,20 @@ export class AdminOrdersPage implements OnInit {
       user: [this.username],
       date: [this.actualDate],
       store: ['']
+    });
+
+    this.notificationForm = this.formBuilder.group({
+      app_id: ['30538eaa-216c-4e7a-9cf4-2dbd597cf92b'],
+      included_segments: ['Active Users'],
+      headings: {
+        en: 'Hay un nuevo pedido'
+      },
+      contents: {
+        en: ''
+      },
+      data: {
+        task: 'Aceptar'
+      }
     });
   }
 
@@ -206,6 +224,7 @@ export class AdminOrdersPage implements OnInit {
                 message: res.msj
               });
               TOAST.present();
+              this.notification(this.name);
               this.router.navigateByUrl('/orders');
             } else {
               const TOAST = await this.toastController.create({
@@ -227,6 +246,7 @@ export class AdminOrdersPage implements OnInit {
                 message: res.msj
               });
               TOAST.present();
+              this.notification(this.name);
               this.router.navigateByUrl('/orders');
             } else {
               const TOAST = await this.toastController.create({
@@ -295,6 +315,21 @@ export class AdminOrdersPage implements OnInit {
 
   cancel() {
     this.products = [];
+  }
+
+  notification( user: string ) {
+    this.notificationForm.patchValue({
+      contents: {
+        en: `${ user }`
+      }
+    });
+    const form = this.notificationForm.value;
+    this.notificationService.POST( form ).subscribe( res => {
+      if ( res.id ) {
+        return true;
+      }
+    });
+
   }
 
 }

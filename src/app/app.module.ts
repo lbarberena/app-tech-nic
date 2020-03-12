@@ -14,16 +14,17 @@ import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
 import { EmailComposer } from '@ionic-native/email-composer/ngx';
+import { FingerprintAIO } from '@ionic-native/fingerprint-aio/ngx';
+import { OneSignal } from '@ionic-native/onesignal/ngx';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
+import { AuthService } from './services/auth.service';
+import { ErrorService } from './services/error.service';
 import { AuthenticationPageModule } from './pages/authentication/authentication.module';
 import { AuthenticationPage } from './pages/authentication/authentication.page';
 import { RegisterPage } from './pages/authentication/register.page';
-import { AuthService } from './services/auth.service';
-import { ErrorService } from './services/error.service';
-import { FingerprintAIO } from '@ionic-native/fingerprint-aio/ngx';
 
 export function tokenGetterFactory() {
   return localStorage.getItem('auth-token');
@@ -62,7 +63,8 @@ export function tokenGetterFactory() {
     LocalNotifications,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     EmailComposer,
-    FingerprintAIO
+    FingerprintAIO,
+    OneSignal
   ],
   bootstrap: [AppComponent]
 })

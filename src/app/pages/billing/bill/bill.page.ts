@@ -5,12 +5,13 @@ import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { ToastController, AlertController, ModalController, Platform } from '@ionic/angular';
 
 import { EmailComposer } from '@ionic-native/email-composer/ngx';
+import { LocalNotifications, ELocalNotificationTriggerUnit } from '@ionic-native/local-notifications/ngx';
 
 import { BillsService } from 'src/app/services/bills.service';
 import { ItemsModel } from 'src/app/helpers/models/items.model';
 import { ItemsService } from 'src/app/services/items.service';
 import { ProductsModalPage } from 'src/app/modals/products-modal/products-modal.page';
-import { LocalNotifications, ELocalNotificationTriggerUnit } from '@ionic-native/local-notifications/ngx';
+import { NotificationsService } from 'src/app/services/notifications.service';
 
 @Component({
   selector: 'app-bill',
@@ -34,6 +35,7 @@ export class BillPage implements OnInit {
   productListForm: FormGroup;
   username: string;
   role: string;
+  notificationForm: FormGroup;
   userId: string;
   data = [{
     _id: '',
@@ -49,6 +51,7 @@ export class BillPage implements OnInit {
   emailProducts = [];
   emailInpunt;
   itemsNotification = [];
+  name: string;
   constructor( private route: ActivatedRoute,
                private itemsService: ItemsService,
                private formBuilder: FormBuilder,
@@ -59,7 +62,8 @@ export class BillPage implements OnInit {
                private router: Router,
                private emailComposer: EmailComposer,
                private localNotifications: LocalNotifications,
-               private plt: Platform ) {
+               private plt: Platform,
+               private notificationService: NotificationsService ) {
                 this.plt.ready().then(() => {
                   this.localNotifications.on('click').subscribe( res => {
                     let msg = res.data ? res.data.page : '';
@@ -85,12 +89,27 @@ export class BillPage implements OnInit {
       month: [this.actualMonth],
       clientEmail: ['']
     });
+
+    this.notificationForm = this.formBuilder.group({
+      app_id: ['30538eaa-216c-4e7a-9cf4-2dbd597cf92b'],
+      included_segments: ['Active Users'],
+      headings: {
+        en: 'Producto agotado'
+      },
+      contents: {
+        en: ''
+      },
+      data: {
+        task: 'Aceptar'
+      }
+    });
   }
 
   ionViewWillEnter() {
     this.username = localStorage.getItem('user');
     this.role = localStorage.getItem('role');
     this.userId = localStorage.getItem('userId');
+    this.name = localStorage.getItem('name');
     this.ID = this.route.snapshot.paramMap.get('id');
     this.roles();
     if ( this.ID ) {
@@ -461,9 +480,13 @@ GetProductsToNotificate() {
   this.itemsNotification = this.productsForm.value;
   this.itemsNotification.forEach( e => {
     this.itemsService.GetByID( e._id ).subscribe( res => {
-      if ( res.data.quantity === 0 ) {
-        this.notification(res.data.name);
-      }
+      if ( res.data.quantity === 0 && (this.admin || this.CEO) ) {
+        this.notification( res.data.name );
+      } /* else if ( res.data.quantity === 0 ) {
+        if ( res.data.store === this.name ) {
+          this.notification( res.data.name );
+        }
+      } */
     });
   });
 }
@@ -476,13 +499,25 @@ showNotificationAlert( Header, sub ) {
   }).then( alert => alert.present());
 }
 
-notification(product: string) {
+notification( product: string) {
   this.localNotifications.schedule({
     id: 1,
-    title: 'Producto acabado',
-    text: `Producto: ${ product }`,
+    title: 'Producto agotado',
+    text: `${ product }`,
     trigger: { in: 5, unit: ELocalNotificationTriggerUnit.SECOND },
     smallIcon : 'res://mipmap-ldpi/ic_launcher.png'
+  });
+
+  this.notificationForm.patchValue({
+    contents: {
+      en: product
+    }
+  });
+  const form = this.notificationForm.value;
+  this.notificationService.POST( form ).subscribe( res => {
+    if ( res.id ) {
+      return true;
+    }
   });
 }
 

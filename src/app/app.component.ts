@@ -5,6 +5,7 @@ import { Platform, AlertController, MenuController } from '@ionic/angular';
 
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
+import { OneSignal } from '@ionic-native/onesignal/ngx';
 
 import { AuthenticationPage } from './pages/authentication/authentication.page';
 import { Tab1Page } from './pages/billing/tab1.page';
@@ -28,7 +29,8 @@ export class AppComponent {
     private statusBar: StatusBar,
     private router: Router,
     private alertCtrl: AlertController,
-    public menuCtrl: MenuController
+    public menuCtrl: MenuController,
+    private oneSignal: OneSignal
   ) {
     this.initializeApp();
     this.roles();
@@ -40,9 +42,10 @@ export class AppComponent {
       this.splashScreen.hide();
       this.name = localStorage.getItem('name');
       this.username = localStorage.getItem('user');
-      this.rootPage = this.token
-                    ? Tab1Page
-                    : AuthenticationPage;
+
+      if (this.platform.is('cordova')) {
+        this.setPush();
+      }
     });
   }
 
@@ -88,5 +91,43 @@ export class AppComponent {
 
   closeMenu() {
     this.menuCtrl.close();
+  }
+
+  setPush() {
+    this.oneSignal.startInit('30538eaa-216c-4e7a-9cf4-2dbd597cf92b', '675719053325');
+
+    this.oneSignal.inFocusDisplaying(this.oneSignal.OSInFocusDisplayOption.None);
+
+    this.oneSignal.handleNotificationOpened().subscribe( res => {
+      let additionalData = res.notification.payload.additionalData;
+      let msg = res.notification.payload.body;
+      let title = res.notification.payload.title;
+      this.showAlert(title, msg, additionalData.task);
+    });
+
+    this.oneSignal.handleNotificationReceived().subscribe( res => {
+      let msg = res.payload.body;
+      let title = res.payload.title;
+      let additionalData = res.payload.additionalData;
+      this.showAlert(title, msg, additionalData.task);
+    });
+
+    this.oneSignal.endInit();
+  }
+
+  async showAlert(title, msg, data) {
+    const alert = await this.alertCtrl.create({
+      header: title,
+      subHeader: msg,
+      buttons: [
+        {
+          text: `${ data }`,
+          handler: () => {
+
+          }
+        }
+      ]
+    });
+    alert.present();
   }
 }
