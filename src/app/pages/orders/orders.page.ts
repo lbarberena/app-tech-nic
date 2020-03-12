@@ -93,6 +93,10 @@ export class OrdersPage implements OnInit {
       header: '¿Seguro quieres eliminar?',
       buttons: [
         {
+          text: 'Cancelar',
+          role: 'cancel'
+        },
+        {
           text: 'Confirmar',
           handler: ( data ) => {
             this.ordersService.DELETE( id ).subscribe( async res => {
@@ -112,10 +116,6 @@ export class OrdersPage implements OnInit {
               }
             });
           }
-        },
-        {
-          text: 'Cancelar',
-          role: 'cancel'
         }
       ]
     });

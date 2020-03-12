@@ -45,6 +45,10 @@ export class StoresPage {
       header: '¿Seguro quieres eliminar?',
       buttons: [
         {
+          text: 'Cancelar',
+          role: 'cancel'
+        },
+        {
           text: 'Confirmar',
           handler: ( data ) => {
             this.storesService.DELETE( storeId ).subscribe( async res => {
@@ -64,10 +68,6 @@ export class StoresPage {
               }
             });
           }
-        },
-        {
-          text: 'Cancelar',
-          role: 'cancel'
         }
       ]
     });

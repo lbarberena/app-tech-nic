@@ -41,6 +41,10 @@ export class AccountsPage {
       header: '¿Seguro quieres eliminar?',
       buttons: [
         {
+          text: 'Cancelar',
+          role: 'cancel'
+        },
+        {
           text: 'Confirmar',
           handler: ( data ) => {
             this.authService.DELETE( accountId ).subscribe( async res => {
@@ -60,10 +64,6 @@ export class AccountsPage {
               }
             });
           }
-        },
-        {
-          text: 'Cancelar',
-          role: 'cancel'
         }
       ]
     });

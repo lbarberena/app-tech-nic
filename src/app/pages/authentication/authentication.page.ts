@@ -91,8 +91,7 @@ export class AuthenticationPage implements OnInit {
   fingerPrint() {
     this.faio.show({
       disableBackup: false,
-      title: 'Iniciar Sesión',
-      subtitle: 'Utiliza tu huella'
+      title: 'Iniciar Sesión'
   })
   .then(async (result: any) => {
     const TOAST = await this.toastController.create({

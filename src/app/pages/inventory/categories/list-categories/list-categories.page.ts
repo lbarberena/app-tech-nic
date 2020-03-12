@@ -56,6 +56,10 @@ export class ListCategoriesPage {
       header: '¿Seguro quieres eliminar?',
       buttons: [
         {
+          text: 'Cancelar',
+          role: 'cancel'
+        },
+        {
           text: 'Confirmar',
           handler: ( data ) => {
             this.categoriesService.DELETE( categoryId ).subscribe( async res => {
@@ -75,10 +79,6 @@ export class ListCategoriesPage {
               }
             });
           }
-        },
-        {
-          text: 'Cancelar',
-          role: 'cancel'
         }
       ]
     });

@@ -84,6 +84,10 @@ export class Tab1Page {
       header: '¿Seguro quieres eliminar?',
       buttons: [
         {
+          text: 'Cancelar',
+          role: 'cancel'
+        },
+        {
           text: 'Confirmar',
           handler: ( data ) => {
             let Quantity = 0;
@@ -129,10 +133,6 @@ export class Tab1Page {
               }
             });
           }
-        },
-        {
-          text: 'Cancelar',
-          role: 'cancel'
         }
       ]
     });

@@ -66,6 +66,10 @@ export class AppComponent {
       header: '¿Seguro quieres salir?',
       buttons: [
         {
+          text: 'Cancelar',
+          role: 'cancel'
+        },
+        {
           text: 'Salir',
           handler: ( data ) => {
             localStorage.removeItem('auth-token');
@@ -76,10 +80,6 @@ export class AppComponent {
             this.closeMenu();
             this.router.navigateByUrl('/authentication');
           }
-        },
-        {
-          text: 'Cancelar',
-          role: 'cancel'
         }
       ]
     });

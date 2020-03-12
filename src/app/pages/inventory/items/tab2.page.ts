@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 
 import { AlertController, ToastController, Platform } from '@ionic/angular';
 
-import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
+import { LocalNotifications, ELocalNotificationTriggerUnit } from '@ionic-native/local-notifications/ngx';
 
 import { ItemsService } from '../../../services/items.service';
 import { ItemsModel } from '../../../helpers/models/items.model';
@@ -34,13 +34,7 @@ export class Tab2Page {
                private alertCtrl: AlertController,
                public toastController: ToastController,
                private localNotifications: LocalNotifications,
-               private plt: Platform ) {
-                 /* this.plt.ready().then(() => {
-                  this.localNotifications.on('click').subscribe( res => {
-
-                  });
-                 }); */
-               }
+               private plt: Platform ) { }
 
   ionViewWillEnter() {
     this.selected = 'all';
@@ -133,6 +127,10 @@ export class Tab2Page {
       header: '¿Seguro quieres eliminar?',
       buttons: [
         {
+          text: 'Cancelar',
+          role: 'cancel'
+        },
+        {
           text: 'Confirmar',
           handler: ( data ) => {
             this.itemsService.DELETE( id ).subscribe( async res => {
@@ -152,10 +150,6 @@ export class Tab2Page {
               }
             });
           }
-        },
-        {
-          text: 'Cancelar',
-          role: 'cancel'
         }
       ]
     });

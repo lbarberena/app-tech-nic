@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 
-import { ToastController, AlertController, ModalController } from '@ionic/angular';
+import { ToastController, AlertController, ModalController, Platform } from '@ionic/angular';
 
 import { EmailComposer } from '@ionic-native/email-composer/ngx';
 
@@ -10,6 +10,7 @@ import { BillsService } from 'src/app/services/bills.service';
 import { ItemsModel } from 'src/app/helpers/models/items.model';
 import { ItemsService } from 'src/app/services/items.service';
 import { ProductsModalPage } from 'src/app/modals/products-modal/products-modal.page';
+import { LocalNotifications, ELocalNotificationTriggerUnit } from '@ionic-native/local-notifications/ngx';
 
 @Component({
   selector: 'app-bill',
@@ -20,6 +21,9 @@ export class BillPage implements OnInit {
 
   title = '';
   ID: string;
+  admin = false;
+  CEO = false;
+  store = false;
   items: ItemsModel[];
   billForm: FormGroup;
   products = [];
@@ -44,6 +48,7 @@ export class BillPage implements OnInit {
   id = false;
   emailProducts = [];
   emailInpunt;
+  itemsNotification = [];
   constructor( private route: ActivatedRoute,
                private itemsService: ItemsService,
                private formBuilder: FormBuilder,
@@ -52,7 +57,20 @@ export class BillPage implements OnInit {
                private alertCtrl: AlertController,
                public modalController: ModalController,
                private router: Router,
-               private emailComposer: EmailComposer ) { }
+               private emailComposer: EmailComposer,
+               private localNotifications: LocalNotifications,
+               private plt: Platform ) {
+                this.plt.ready().then(() => {
+                  this.localNotifications.on('click').subscribe( res => {
+                    let msg = res.data ? res.data.page : '';
+                    this.showNotificationAlert(res.title, res.text);
+                  });
+                  this.localNotifications.on('trigger').subscribe( res => {
+                    let msg = res.data ? res.data.page : '';
+                    this.showNotificationAlert(res.title, res.text);
+                  });
+                 });
+                }
 
   ngOnInit() {
     this.billForm = this.formBuilder.group({
@@ -74,6 +92,7 @@ export class BillPage implements OnInit {
     this.role = localStorage.getItem('role');
     this.userId = localStorage.getItem('userId');
     this.ID = this.route.snapshot.paramMap.get('id');
+    this.roles();
     if ( this.ID ) {
       this.id = true;
       this.title = 'Editar Factura';
@@ -86,7 +105,18 @@ export class BillPage implements OnInit {
     }
   }
 
-  sendEmail(ClientName: string, Code: string, Total: number, EmailInpunt: string) {
+  roles() {
+    if ( (this.role === 'Admin') || (this.role === 'CEO') ) {
+      this.admin = true;
+      this.CEO = true;
+    } else if ( (this.role === 'Vendedor') || (this.role === 'Tienda') ) {
+      this.store = true;
+      this.admin = false;
+      this.CEO = false;
+    }
+  }
+
+  sendEmail(ClientName: string, Code: string, Total: any, EmailInpunt: string) {
     let productName = [];
     let productQuantity = [];
     let productCode = [];
@@ -113,6 +143,9 @@ export class BillPage implements OnInit {
       isHtml: true
     };
     this.emailComposer.open(email);
+    localStorage.removeItem('clientName');
+    localStorage.removeItem('code');
+    localStorage.removeItem('total');
   }
 
   GetBillById( id: string ) {
@@ -147,7 +180,7 @@ export class BillPage implements OnInit {
     });
   }
 
-  async SAVE(email: string) {
+  async SAVE(email) {
     this.billForm.patchValue({
       username: this.username,
       userId: this.userId
@@ -171,7 +204,10 @@ export class BillPage implements OnInit {
               message: res.msj
             });
             TOAST.present();
-            this.sendEmail(res.data.clientName, res.data.code, res.data.total, email);
+            localStorage.setItem('clientName', res.data.clientName);
+            localStorage.setItem('code', res.data.code);
+            localStorage.setItem('total', res.data.total);
+            this.GetProductsToNotificate();
             this.router.navigateByUrl('/tabs/billing');
             this.products = [];
           } else {
@@ -202,7 +238,10 @@ export class BillPage implements OnInit {
               message: res.msj
             });
             TOAST.present();
-            this.sendEmail(res.data.clientName, res.data.code, res.data.total, email);
+            localStorage.setItem('clientName', res.data.clientName);
+            localStorage.setItem('code', res.data.code);
+            localStorage.setItem('total', res.data.total);
+            this.GetProductsToNotificate();
             this.router.navigateByUrl('/tabs/billing');
             this.products = [];
           } else {
@@ -394,21 +433,57 @@ async askForEmail() {
     ],
     buttons: [
       {
-        text: 'Confirmar',
-        handler: ( data ) => {
-          this.SAVE(data.email);
-        }
-      },
-      {
         text: 'Cancelar',
         role: 'cancel',
         handler: ( data ) => {
           this.SAVE('');
+          localStorage.removeItem('clientName');
+          localStorage.removeItem('code');
+          localStorage.removeItem('total');
+        }
+      },
+      {
+        text: 'Confirmar',
+        handler: ( data ) => {
+          this.SAVE(data.email);
+          const name = localStorage.getItem('clientName');
+          const code = localStorage.getItem('code');
+          const total = localStorage.getItem('total');
+          this.sendEmail(name, code, total, data.email);
         }
       }
     ]
   });
   alert.present();
+}
+
+GetProductsToNotificate() {
+  this.itemsNotification = this.productsForm.value;
+  this.itemsNotification.forEach( e => {
+    this.itemsService.GetByID( e._id ).subscribe( res => {
+      if ( res.data.quantity === 0 ) {
+        this.notification(res.data.name);
+      }
+    });
+  });
+}
+
+showNotificationAlert( Header, sub ) {
+  this.alertCtrl.create({
+    header: Header,
+    subHeader: sub,
+    buttons: ['Entendido'],
+  }).then( alert => alert.present());
+}
+
+notification(product: string) {
+  this.localNotifications.schedule({
+    id: 1,
+    title: 'Producto acabado',
+    text: `Producto: ${ product }`,
+    trigger: { in: 5, unit: ELocalNotificationTriggerUnit.SECOND },
+    smallIcon : 'res://mipmap-ldpi/ic_launcher.png'
+  });
 }
 
 }
