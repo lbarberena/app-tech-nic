@@ -4,6 +4,8 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 import { ToastController } from '@ionic/angular';
 
+import { FingerprintAIO } from '@ionic-native/fingerprint-aio/ngx';
+
 import { AuthService } from '../../services/auth.service';
 import { StoresService } from '../../services/stores.service';
 import { StoresModel } from '../../helpers/models/stores.model';
@@ -28,7 +30,8 @@ export class RegisterPage implements OnInit {
                private formBuilder: FormBuilder,
                public toastController: ToastController,
                private route: ActivatedRoute,
-               private storesService: StoresService ) { }
+               private storesService: StoresService,
+               private faio: FingerprintAIO ) { }
 
   ngOnInit() {
     this.registerForm = this.formBuilder.group({
@@ -241,6 +244,29 @@ export class RegisterPage implements OnInit {
         const categoriesCollection = (await res.data);
         this.stores = categoriesCollection;
       }
+    });
+  }
+
+  fingerPrint() {
+    this.faio.show({
+      disableBackup: false,
+      title: 'Iniciar Sesión'
+  })
+  .then(async (result: any) => {
+    const TOAST = await this.toastController.create({
+      duration: 3,
+      message: 'Autorizado'
+    });
+    TOAST.present();
+    this.register();
+  })
+  .catch((error: any) => {
+    this.router.navigateByUrl('/authentication');
+    localStorage.removeItem('auth-token');
+    localStorage.removeItem('user');
+    localStorage.removeItem('userId');
+    localStorage.removeItem('role');
+    localStorage.removeItem('name');
     });
   }
 

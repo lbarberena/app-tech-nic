@@ -69,5 +69,5 @@
     </form>
 
     <ion-button *ngIf="changePassword && id" expand="full" (click)="btnChangePassword()">Cambiar Contraseña</ion-button>
-    <ion-button expand="full" [disabled]="!registerForm.valid" (click)="register()">{{ btnText }}</ion-button>
+    <ion-button expand="full" [disabled]="!registerForm.valid" (click)="fingerPrint()">{{ btnText }}</ion-button>
 </ion-content>
