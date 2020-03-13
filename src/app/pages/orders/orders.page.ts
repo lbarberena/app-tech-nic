@@ -25,6 +25,7 @@ export class OrdersPage implements OnInit {
   name: string;
   CEO = false;
   store = false;
+  loading = false;
 
 
   constructor( private router: Router,
@@ -36,6 +37,7 @@ export class OrdersPage implements OnInit {
   }
 
   ionViewWillEnter() {
+    this.loading = true;
     this.orders = [];
     this.myOrders = [];
     this.storeOrders = [];
@@ -80,6 +82,7 @@ export class OrdersPage implements OnInit {
           this.myOrders.push(e);
         }
       });
+      this.loading = false;
     });
 
   }

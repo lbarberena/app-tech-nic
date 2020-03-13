@@ -25,6 +25,7 @@ export class Tab1Page {
   CEO = false;
   store = false;
   myBillsReverse = [];
+  loading = true;
 
   constructor( private billsService: BillsService,
                private router: Router,
@@ -33,6 +34,7 @@ export class Tab1Page {
                private itemsService: ItemsService ) {}
 
   ionViewWillEnter() {
+    this.loading = true;
     this.selected = 'mines';
     this.username = localStorage.getItem('user');
     this.role = localStorage.getItem('role');
@@ -72,6 +74,7 @@ export class Tab1Page {
           this.myBills.push( e );
         }
       });
+      this.loading = false;
     });
   }
 

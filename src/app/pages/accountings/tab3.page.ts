@@ -34,6 +34,7 @@ export class Tab3Page implements OnInit {
   actualMonth = new Date().getUTCMonth() + 1;
   actualDate: Date;
   total = 0;
+  loading = false;
 
   constructor( private router: Router,
                private formBuilder: FormBuilder,
@@ -42,6 +43,7 @@ export class Tab3Page implements OnInit {
                private billsService: BillsService ) {}
 
   ngOnInit() {
+    this.loading = true;
     this.actualDate = new Date();
     this.total = 0;
     this.bills = [];
@@ -63,6 +65,7 @@ export class Tab3Page implements OnInit {
   }
 
   ionViewWillEnter() {
+    this.loading = true;
     this.actualDate = new Date();
     this.name = localStorage.getItem('name');
     this.role = localStorage.getItem('role');
@@ -108,6 +111,7 @@ export class Tab3Page implements OnInit {
           this.accountingsStore.push(e);
         }
       });
+      this.loading = false;
     });
   }
 

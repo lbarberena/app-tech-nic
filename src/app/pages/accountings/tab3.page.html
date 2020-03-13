@@ -46,6 +46,10 @@
 
     <ion-searchbar *ngIf="(!admin && CEO) || (admin && !CEO)" [(ngModel)]="searchInput" [ngModelOptions]="{standalone: true}" placeholder="Buscar por usuarios"></ion-searchbar>
 
+    <ion-label *ngIf="loading">Cargando...
+        <ion-spinner *ngIf="loading"></ion-spinner>
+    </ion-label>
+
     <div *ngIf="(!admin && CEO) || (admin && !CEO)">
         <ion-card *ngFor="let a of accountings | accountingsFilter: searchInput">
             <ion-card-header>

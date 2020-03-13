@@ -66,7 +66,7 @@ export class AdminOrdersPage implements OnInit {
 
     this.notificationForm = this.formBuilder.group({
       app_id: ['30538eaa-216c-4e7a-9cf4-2dbd597cf92b'],
-      included_segments: ['Active Users'],
+      included_segments: ['Subscribed Users'],
       headings: {
         en: 'Hay un nuevo pedido'
       },

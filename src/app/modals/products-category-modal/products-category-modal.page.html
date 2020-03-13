@@ -29,6 +29,10 @@
 
     <div *ngSwitchCase="'all'">
 
+        <ion-label *ngIf="loading">Cargando...
+            <ion-spinner *ngIf="loading"></ion-spinner>
+        </ion-label>
+
         <ion-card *ngFor="let i of items | itemsFilter: searchItemsInput">
             <ion-card-header>
                 <ion-card-subtitle>Código: {{ i.code }}</ion-card-subtitle>
@@ -64,6 +68,10 @@
     </div>
 
     <div *ngSwitchCase="'gone'">
+
+        <ion-label *ngIf="loading">Cargando...
+            <ion-spinner *ngIf="loading"></ion-spinner>
+        </ion-label>
 
         <ion-card *ngFor="let i of goneItems | itemsFilter: searchItemsInput">
             <ion-card-header>
@@ -101,6 +109,10 @@
 
     <div *ngSwitchCase="'allStore'">
 
+        <ion-label *ngIf="loading">Cargando...
+            <ion-spinner *ngIf="loading"></ion-spinner>
+        </ion-label>
+
         <ion-card *ngFor="let i of itemsStore | itemsFilter: searchItemsInput">
             <ion-card-header>
                 <ion-card-subtitle>Código: {{ i.code }}</ion-card-subtitle>
@@ -129,6 +141,10 @@
     </div>
 
     <div *ngSwitchCase="'goneStore'">
+
+        <ion-label *ngIf="loading">Cargando...
+            <ion-spinner *ngIf="loading"></ion-spinner>
+        </ion-label>
 
         <ion-card *ngFor="let i of goneItemsStore | itemsFilter: searchItemsInput">
             <ion-card-header>

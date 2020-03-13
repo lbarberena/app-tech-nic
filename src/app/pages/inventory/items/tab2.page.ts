@@ -26,6 +26,7 @@ export class Tab2Page {
   selected;
   goneItems = [];
   goneItemsStore = [];
+  loading = false;
 
   constructor( private router: Router,
                private itemsService: ItemsService,
@@ -33,6 +34,7 @@ export class Tab2Page {
                public toastController: ToastController ) { }
 
   ionViewWillEnter() {
+    this.loading = true;
     this.selected = 'all';
     this.username = localStorage.getItem('user');
     this.role = localStorage.getItem('role');
@@ -88,6 +90,7 @@ export class Tab2Page {
           }
         }
       });
+      this.loading = false;
     });
   }
 

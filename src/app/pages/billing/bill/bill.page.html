@@ -42,13 +42,13 @@
             <ion-grid *ngFor="let p of productsForm.controls; let i = index" [formGroupName]="i">
                 <ion-row>
                     <ion-col>
-                        <ion-input readonly="readonly" type="text" formControlName="productName"></ion-input>
+                        <ion-input readonly="readonly" type="text" formControlName="productName" (click)="showData(products[i].value.productName, products[i].value.quantity, products[i].value.price)"></ion-input>
                     </ion-col>
                     <ion-col>
-                        <ion-input readonly="readonly" type="number" formControlName="quantity"></ion-input>
+                        <ion-input readonly="readonly" type="number" formControlName="quantity" (click)="showData(products[i].value.productName, products[i].value.quantity, products[i].value.price)"></ion-input>
                     </ion-col>
                     <ion-col>
-                        <ion-input readonly="readonly" type="number" formControlName="price"></ion-input>
+                        <ion-input readonly="readonly" type="number" formControlName="price" (click)="showData(products[i].value.productName, products[i].value.quantity, products[i].value.price)"></ion-input>
                     </ion-col>
                     <ion-col>
                         <ion-button color="danger" (click)="deleteProduct( i )">

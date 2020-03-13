@@ -27,6 +27,10 @@
 
     <ion-list *ngSwitchCase="'all'">
 
+        <ion-label *ngIf="loading">Cargando...
+            <ion-spinner *ngIf="loading"></ion-spinner>
+        </ion-label>
+
         <ion-item-sliding *ngFor="let o of orders | ordersFilter: searchInput">
 
             <ion-item>
@@ -61,6 +65,10 @@
 
     <ion-list *ngSwitchCase="'mines'">
 
+        <ion-label *ngIf="loading">Cargando...
+            <ion-spinner *ngIf="loading"></ion-spinner>
+        </ion-label>
+
         <ion-item-sliding *ngFor="let o of myOrders | ordersFilter: searchInput">
 
             <ion-item>
@@ -94,6 +102,10 @@
     </ion-list>
 
     <ion-list *ngSwitchCase="'minesStore'">
+
+        <ion-label *ngIf="loading">Cargando...
+            <ion-spinner *ngIf="loading"></ion-spinner>
+        </ion-label>
 
         <ion-item-sliding *ngFor="let o of storeOrders | ordersFilter: searchInput">
 

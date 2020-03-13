@@ -14,6 +14,10 @@
         <ion-refresher-content></ion-refresher-content>
     </ion-refresher>
 
+    <ion-label *ngIf="loading">Cargando...
+        <ion-spinner *ngIf="loading"></ion-spinner>
+    </ion-label>
+
     <ion-list #slidingList>
 
         <ion-item-sliding *ngFor="let a of accounts | accountsFilter: searchInput">

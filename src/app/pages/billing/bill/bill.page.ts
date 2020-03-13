@@ -79,7 +79,7 @@ export class BillPage implements OnInit {
 
     this.notificationForm = this.formBuilder.group({
       app_id: ['30538eaa-216c-4e7a-9cf4-2dbd597cf92b'],
-      included_segments: ['Active Users'],
+      included_segments: ['Subscribed Users'],
       headings: {
         en: 'Producto agotado'
       },
@@ -445,10 +445,10 @@ async askForEmail() {
         text: 'Cancelar',
         role: 'cancel',
         handler: ( data ) => {
-          this.SAVE('');
           localStorage.removeItem('clientName');
           localStorage.removeItem('code');
           localStorage.removeItem('total');
+          this.SAVE('');
         }
       },
       {
@@ -501,6 +501,22 @@ notification( product: string) {
       return true;
     }
   });
+}
+
+async showData(name, quantity, price) {
+  let alert;
+  alert = await this.alertCtrl.create({
+    header: `${ name }`,
+    subHeader: `Precio: C$${ price }`,
+    message: `Cantidad: ${ quantity }`,
+    buttons: [
+      {
+        text: 'Cerrar',
+        role: 'cancel'
+      }
+    ]
+  });
+  alert.present();
 }
 
 }

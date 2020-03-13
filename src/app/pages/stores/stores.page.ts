@@ -16,6 +16,7 @@ export class StoresPage {
 
   stores: StoresModel[];
   searchInput;
+  loading = false;
 
   constructor( private storesService: StoresService,
                private router: Router,
@@ -24,6 +25,7 @@ export class StoresPage {
                public modalController: ModalController ) { }
 
   ionViewWillEnter() {
+    this.loading = true;
     this.GET();
   }
 
@@ -32,6 +34,7 @@ export class StoresPage {
       if ( res.success ) {
         const categoriesCollection = (await res.data);
         this.stores = categoriesCollection;
+        this.loading = false;
       }
     });
   }

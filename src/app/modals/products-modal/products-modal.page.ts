@@ -24,11 +24,13 @@ export class ProductsModalPage {
   selected;
   goneItems = [];
   goneItemsStore = [];
+  loading = false;
 
   constructor( public modalController: ModalController,
                private itemsService: ItemsService ) { }
 
   ionViewWillEnter() {
+    this.loading = true;
     this.selected = 'all';
     this.username = localStorage.getItem('user');
     this.role = localStorage.getItem('role');
@@ -90,6 +92,7 @@ export class ProductsModalPage {
           }
         }
       });
+      this.loading = false;
     });
   }
 

@@ -24,6 +24,10 @@
 
     <ion-list *ngSwitchCase="'all'" #slidingList>
 
+        <ion-label *ngIf="loading">Cargando...
+            <ion-spinner *ngIf="loading"></ion-spinner>
+        </ion-label>
+
         <ion-item-sliding *ngFor="let b of bills | billsFilter: searchBillsInput">
 
             <ion-item>
@@ -72,6 +76,10 @@
     </ion-list>
 
     <ion-list *ngSwitchCase="'mines'" #SlidingList>
+
+        <ion-label *ngIf="loading">Cargando...
+            <ion-spinner *ngIf="loading"></ion-spinner>
+        </ion-label>
 
         <ion-item-sliding *ngFor="let b of myBills | billsFilter: searchBillsInput">
 

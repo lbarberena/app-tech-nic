@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+
 import { ToastController, AlertController } from '@ionic/angular';
+
 import { AuthService } from '../../services/auth.service';
 import { RegisterModel } from '../../helpers/models/register.model';
 
@@ -13,6 +15,7 @@ export class AccountsPage {
 
   accounts: RegisterModel[];
   searchInput;
+  loading = false;
 
   constructor( private router: Router,
                public toastController: ToastController,
@@ -20,6 +23,7 @@ export class AccountsPage {
                private authService: AuthService ) { }
 
   ionViewWillEnter() {
+    this.loading = true;
     this.GET();
   }
 
@@ -28,6 +32,7 @@ export class AccountsPage {
       if ( res.success ) {
         const accountsCollection = (await res.data);
         this.accounts = accountsCollection;
+        this.loading = false;
       }
     });
   }

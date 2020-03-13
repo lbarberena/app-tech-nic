@@ -22,6 +22,10 @@
 
     <div *ngSwitchCase="'all'">
 
+        <ion-label *ngIf="loading">Cargando...
+            <ion-spinner *ngIf="loading"></ion-spinner>
+        </ion-label>
+
         <ion-list *ngIf="admin && CEO" #slidingList>
             <ion-item-sliding *ngFor="let i of items | itemsFilter: searchItemsInput">
                 <ion-item>
@@ -128,6 +132,10 @@
     </div>
 
     <div *ngSwitchCase="'gone'">
+
+        <ion-label *ngIf="loading">Cargando...
+            <ion-spinner *ngIf="loading"></ion-spinner>
+        </ion-label>
 
         <ion-list *ngIf="admin && CEO" #slidingList>
             <ion-item-sliding *ngFor="let i of goneItems | itemsFilter: searchItemsInput">

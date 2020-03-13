@@ -1,8 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { CategoriesService } from 'src/app/services/categories.service';
-import { ToastController, AlertController, ModalController } from '@ionic/angular';
-import { CategoriesModel } from 'src/app/helpers/models/categories.model';
 import { Router } from '@angular/router';
+
+import { ToastController, AlertController, ModalController } from '@ionic/angular';
+
+import { CategoriesService } from 'src/app/services/categories.service';
+import { CategoriesModel } from 'src/app/helpers/models/categories.model';
 import { ProductsCategoryModalPage } from 'src/app/modals/products-category-modal/products-category-modal.page';
 
 @Component({
@@ -16,6 +18,7 @@ export class ListCategoriesPage {
   role = '';
   admin = false;
   searchInput;
+  loading = false;
 
   constructor( private categoriesService: CategoriesService,
                public toastController: ToastController,
@@ -26,6 +29,7 @@ export class ListCategoriesPage {
   @ViewChild('slidingList', {static: true}) slidingList;
 
   ionViewWillEnter() {
+    this.loading = true;
     this.GET();
     this.roles();
   }
@@ -42,6 +46,7 @@ export class ListCategoriesPage {
       if ( res.success ) {
         const categoriesCollection = (await res.data);
         this.categories = categoriesCollection;
+        this.loading = false;
       }
     });
   }
