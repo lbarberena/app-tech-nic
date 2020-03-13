@@ -108,6 +108,7 @@ export class AdminOrdersPage implements OnInit {
           get: e.get
         });
         this.productsForm.push(productForm);
+        this.products.push(productForm);
       });
 
       this.ordersForm.patchValue({
@@ -330,6 +331,22 @@ export class AdminOrdersPage implements OnInit {
       }
     });
 
+  }
+
+  async showData(name, quantity, color) {
+    let alert;
+    alert = await this.alertCtrl.create({
+      header: `${ name }`,
+      subHeader: `Cantidad: ${ quantity }`,
+      message: `Color: ${ color }`,
+      buttons: [
+        {
+          text: 'Cerrar',
+          role: 'cancel'
+        }
+      ]
+    });
+    alert.present();
   }
 
 }

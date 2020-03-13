@@ -38,13 +38,13 @@
             <ion-grid *ngFor="let p of productsForm.controls; let i = index" [formGroupName]="i">
                 <ion-row>
                     <ion-col>
-                        <ion-input type="text" formControlName="itemName"></ion-input>
+                        <ion-input readonly="readonly" type="text" formControlName="itemName" (click)="showData(products[i].value.itemName, products[i].value.quantity, products[i].value.color)"></ion-input>
                     </ion-col>
                     <ion-col>
                         <ion-input type="number" formControlName="quantity"></ion-input>
                     </ion-col>
                     <ion-col>
-                        <ion-input type="text" formControlName="color"></ion-input>
+                        <ion-input readonly="readonly" type="text" formControlName="color" (click)="showData(products[i].value.itemName, products[i].value.quantity, products[i].value.color)"></ion-input>
                     </ion-col>
                     <ion-col>
                         <ion-button color="danger" (click)="deleteProduct( i )">
@@ -87,13 +87,13 @@
             <ion-grid *ngFor="let p of productsForm.controls; let i = index" [formGroupName]="i">
                 <ion-row>
                     <ion-col>
-                        <ion-input type="text" formControlName="itemName"></ion-input>
+                        <ion-input readonly="readonly" type="text" formControlName="itemName" (click)="showData(products[i].value.itemName, products[i].value.quantity, products[i].value.color)"></ion-input>
                     </ion-col>
                     <ion-col>
                         <ion-input type="number" formControlName="quantity"></ion-input>
                     </ion-col>
                     <ion-col>
-                        <ion-input type="text" formControlName="color"></ion-input>
+                        <ion-input readonly="readonly" type="text" formControlName="color" (click)="showData(products[i].value.itemName, products[i].value.quantity, products[i].value.color)"></ion-input>
                     </ion-col>
                     <ion-col>
                         <ion-checkbox color="primary" formControlName="get" (ionChange)="changeCheckBox($event)"></ion-checkbox>
