@@ -12,7 +12,6 @@ import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
-import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
 import { EmailComposer } from '@ionic-native/email-composer/ngx';
 import { FingerprintAIO } from '@ionic-native/fingerprint-aio/ngx';
 import { OneSignal } from '@ionic-native/onesignal/ngx';
@@ -60,7 +59,6 @@ export function tokenGetterFactory() {
     SplashScreen,
     ErrorService,
     AuthService,
-    LocalNotifications,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     EmailComposer,
     FingerprintAIO,

@@ -2,10 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 
-import { ToastController, AlertController, ModalController, Platform } from '@ionic/angular';
+import { ToastController, AlertController, ModalController } from '@ionic/angular';
 
 import { EmailComposer } from '@ionic-native/email-composer/ngx';
-import { LocalNotifications, ELocalNotificationTriggerUnit } from '@ionic-native/local-notifications/ngx';
 
 import { BillsService } from 'src/app/services/bills.service';
 import { ItemsModel } from 'src/app/helpers/models/items.model';
@@ -61,19 +60,7 @@ export class BillPage implements OnInit {
                public modalController: ModalController,
                private router: Router,
                private emailComposer: EmailComposer,
-               private localNotifications: LocalNotifications,
-               private plt: Platform,
                private notificationService: NotificationsService ) {
-                this.plt.ready().then(() => {
-                  this.localNotifications.on('click').subscribe( res => {
-                    let msg = res.data ? res.data.page : '';
-                    this.showNotificationAlert(res.title, res.text);
-                  });
-                  this.localNotifications.on('trigger').subscribe( res => {
-                    let msg = res.data ? res.data.page : '';
-                    this.showNotificationAlert(res.title, res.text);
-                  });
-                 });
                 }
 
   ngOnInit() {
@@ -147,7 +134,7 @@ export class BillPage implements OnInit {
     });
     const email = {
       to: `${ EmailInpunt }`,
-      cc: 'djscreem007@gmail.com',
+      cc: 'octaviobarberena8@gmail.com',
       from: 'technicaragua1@gmail.com',
       subject: `Factura ${ Code } Tech Nic`,
       body: `Tech Nic Accessories and more <br><br>
@@ -161,7 +148,10 @@ export class BillPage implements OnInit {
       Gracias por tu compra!`,
       isHtml: true
     };
-    this.emailComposer.open(email);
+    this.emailComposer.addAlias('gmail', 'com.google.android.gm');
+    this.emailComposer.open({
+      app: 'gmail'
+    });
     localStorage.removeItem('clientName');
     localStorage.removeItem('code');
     localStorage.removeItem('total');
@@ -480,7 +470,7 @@ GetProductsToNotificate() {
   this.itemsNotification = this.productsForm.value;
   this.itemsNotification.forEach( e => {
     this.itemsService.GetByID( e._id ).subscribe( res => {
-      if ( res.data.quantity === 0 && (this.admin || this.CEO) ) {
+      if ( res.data.quantity === 0 ) {
         this.notification( res.data.name );
       } /* else if ( res.data.quantity === 0 ) {
         if ( res.data.store === this.name ) {
@@ -500,14 +490,6 @@ showNotificationAlert( Header, sub ) {
 }
 
 notification( product: string) {
-  this.localNotifications.schedule({
-    id: 1,
-    title: 'Producto agotado',
-    text: `${ product }`,
-    trigger: { in: 5, unit: ELocalNotificationTriggerUnit.SECOND },
-    smallIcon : 'res://mipmap-ldpi/ic_launcher.png'
-  });
-
   this.notificationForm.patchValue({
     contents: {
       en: product

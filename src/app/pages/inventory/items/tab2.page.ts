@@ -1,9 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { AlertController, ToastController, Platform } from '@ionic/angular';
-
-import { LocalNotifications, ELocalNotificationTriggerUnit } from '@ionic-native/local-notifications/ngx';
+import { AlertController, ToastController } from '@ionic/angular';
 
 import { ItemsService } from '../../../services/items.service';
 import { ItemsModel } from '../../../helpers/models/items.model';
@@ -32,9 +30,7 @@ export class Tab2Page {
   constructor( private router: Router,
                private itemsService: ItemsService,
                private alertCtrl: AlertController,
-               public toastController: ToastController,
-               private localNotifications: LocalNotifications,
-               private plt: Platform ) { }
+               public toastController: ToastController ) { }
 
   ionViewWillEnter() {
     this.selected = 'all';

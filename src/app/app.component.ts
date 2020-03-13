@@ -7,9 +7,6 @@ import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { OneSignal } from '@ionic-native/onesignal/ngx';
 
-import { AuthenticationPage } from './pages/authentication/authentication.page';
-import { Tab1Page } from './pages/billing/tab1.page';
-
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
@@ -33,15 +30,13 @@ export class AppComponent {
     private oneSignal: OneSignal
   ) {
     this.initializeApp();
-    this.roles();
   }
 
   initializeApp() {
     this.platform.ready().then(() => {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
-      this.name = localStorage.getItem('name');
-      this.username = localStorage.getItem('user');
+      this.roles();
 
       if (this.platform.is('cordova')) {
         this.setPush();
@@ -49,11 +44,9 @@ export class AppComponent {
     });
   }
 
-  ionViewWillEnter() {
-    this.roles();
-  }
-
   roles() {
+    this.name = localStorage.getItem('name');
+    this.username = localStorage.getItem('user');
     this.role = localStorage.getItem('role');
     if ( (this.role === 'Admin') ) {
       this.admin = true;
