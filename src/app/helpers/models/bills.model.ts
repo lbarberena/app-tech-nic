@@ -10,4 +10,5 @@ export interface BillsModel {
     total: number;
     Date: string;
     month: number;
+    discount: number;
   }

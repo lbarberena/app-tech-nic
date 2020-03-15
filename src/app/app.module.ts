@@ -15,6 +15,10 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { EmailComposer } from '@ionic-native/email-composer/ngx';
 import { FingerprintAIO } from '@ionic-native/fingerprint-aio/ngx';
 import { OneSignal } from '@ionic-native/onesignal/ngx';
+import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
+import { Base64ToGallery } from '@ionic-native/base64-to-gallery/ngx';
+
+import { NgxQRCodeModule } from 'ngx-qrcode2';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -43,6 +47,7 @@ export function tokenGetterFactory() {
     AppRoutingModule,
     ReactiveFormsModule,
     FormsModule,
+    NgxQRCodeModule,
     HttpClientModule,
     JwtModule.forRoot({
       config: {
@@ -62,7 +67,9 @@ export function tokenGetterFactory() {
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     EmailComposer,
     FingerprintAIO,
-    OneSignal
+    OneSignal,
+    BarcodeScanner,
+    Base64ToGallery
   ],
   bootstrap: [AppComponent]
 })

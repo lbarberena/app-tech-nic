@@ -45,6 +45,14 @@ export class ItemsService {
     );
   }
 
+  GetByCode( itemCode: string ): Observable<any> {
+    return this.http.post<GenericResponseModel>(`${this.url}/code`, itemCode, this.httpOptions )
+    .pipe(
+      retry( 1 ),
+      catchError( this.errorService.handleError )
+    );
+  }
+
   POST( data: any ): Observable<any> {
     this.body = JSON.stringify( data );
 

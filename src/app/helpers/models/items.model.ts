@@ -15,4 +15,5 @@ export interface ItemsModel {
     store: string;
     createDate: Date;
     bdCreateDate: number;
+    QRcode: string;
   }

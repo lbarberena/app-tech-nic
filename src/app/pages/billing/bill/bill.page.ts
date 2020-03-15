@@ -12,6 +12,8 @@ import { ItemsService } from 'src/app/services/items.service';
 import { ProductsModalPage } from 'src/app/modals/products-modal/products-modal.page';
 import { NotificationsService } from 'src/app/services/notifications.service';
 
+import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
+
 @Component({
   selector: 'app-bill',
   templateUrl: './bill.page.html',
@@ -51,6 +53,9 @@ export class BillPage implements OnInit {
   emailInpunt;
   itemsNotification = [];
   name: string;
+  scannedCode = null;
+  discount: number;
+  discountFlag = false;
   constructor( private route: ActivatedRoute,
                private itemsService: ItemsService,
                private formBuilder: FormBuilder,
@@ -60,7 +65,8 @@ export class BillPage implements OnInit {
                public modalController: ModalController,
                private router: Router,
                private emailComposer: EmailComposer,
-               private notificationService: NotificationsService ) {
+               private notificationService: NotificationsService,
+               private barcodeScanner: BarcodeScanner ) {
                 }
 
   ngOnInit() {
@@ -74,7 +80,8 @@ export class BillPage implements OnInit {
       total: ['', Validators.required],
       Date: [this.actualDate],
       month: [this.actualMonth],
-      clientEmail: ['']
+      clientEmail: [''],
+      discount: ['']
     });
 
     this.notificationForm = this.formBuilder.group({
@@ -269,7 +276,7 @@ export class BillPage implements OnInit {
     return this.billForm.get('products') as FormArray;
   }
 
-  async addProducts( id: string, productId: string, name: string, Quantity: number, UnitCost: number, Price: number, Code: string) {
+  async addProducts(productId: string, name: string, Quantity: number, UnitCost: number, Price: number, Code: string) {
     this.productListForm = this.formBuilder.group({
       _id: productId,
       code: Code,
@@ -282,7 +289,7 @@ export class BillPage implements OnInit {
     const QuantityTemp = this.productQuantity - Quantity;
 
     if ( QuantityTemp >= 0 ) {
-      this.itemsService.PUT(id, {
+      this.itemsService.PUT(productId, {
         quantity: QuantityTemp
       }).subscribe( res => {
         this.GetItems();
@@ -341,7 +348,7 @@ export class BillPage implements OnInit {
             quantity: 1,
             unitCost: res.data.unitCost
           });
-          this.addProducts(data._id, res.data._id, res.data.name, 1, res.data.unitCost, res.data.price, res.data.code);
+          this.addProducts( res.data._id, res.data.name, 1, res.data.unitCost, res.data.price, res.data.code);
         } else {
           const TOAST = await this.toastController.create({
             duration: 3,
@@ -517,6 +524,128 @@ async showData(name, quantity, price) {
     ]
   });
   alert.present();
+}
+
+scanCode() {
+  this.barcodeScanner.scan().then(
+    barcodeData => {
+      this.scannedCode = barcodeData;
+      this.GetProductsByCode();
+    }
+  );
+}
+
+GetProductsByCode() {
+
+  const data = this.scannedCode;
+
+  if ( data ) {
+    this.itemsService.GetByCode( data ).subscribe( async res => {
+      this.productQuantity = res.data.quantity;
+      this.billForm.patchValue({
+        code: res.data.code,
+        productName: res.data.name,
+        price: res.data.price,
+        quantity: 1,
+        unitCost: res.data.unitCost
+      });
+      this.addProductsByCode( res.data._id, res.data.name, 1, res.data.unitCost, res.data.price, res.data.code);
+    });
+  }
+}
+
+async addProductsByCode(productId: string, name: string, Quantity: number, UnitCost: number, Price: number, Code: string) {
+  this.productListForm = this.formBuilder.group({
+    _id: productId,
+    code: Code,
+    productName: name,
+    quantity: Quantity,
+    unitCost: UnitCost,
+    price: Price
+  });
+
+  const QuantityTemp = this.productQuantity - Quantity;
+
+  this.itemsService.PUT(productId, {
+    quantity: QuantityTemp
+  }).subscribe( res => {
+    this.GetItems();
+  });
+
+  this.productsForm.push(this.productListForm);
+  this.products.push( this.productListForm );
+  this.check();
+
+}
+
+async addDiscount() {
+  const alert = await this.alertCtrl.create({
+    header: 'Aplicar descuento',
+    inputs: [
+      {
+        name: 'discount',
+        type: 'number',
+        placeholder: 'Cantidad a descontar'
+      }
+    ],
+    buttons: [
+      {
+        text: 'Cancelar',
+        role: 'cancel'
+      },
+      {
+        text: 'Confirmar',
+        handler: ( data ) => {
+          this.discountFlag = true;
+          this.checkDiscount( data.discount );
+        }
+      }
+    ]
+  });
+  alert.present();
+}
+
+checkDiscount( Discount ) {
+  let SubTotal = 0;
+
+  if ( !this.ID ) {
+    this.products.forEach( e => {
+      SubTotal = SubTotal + (e.value.price * e.value.quantity);
+      let Total = SubTotal;
+
+      if ( Discount > 0 ) {
+        Total = Total - Discount;
+      } else {
+        Total = SubTotal;
+      }
+
+      this.billForm.patchValue({
+        subTotal: SubTotal,
+        total: Total,
+        discount: Discount
+      });
+
+    });
+  } else {
+    this.products.forEach( e => {
+      SubTotal = SubTotal + (e.value.price * e.value.quantity);
+      let Total = SubTotal;
+
+      if ( Discount > 0 ) {
+        Total = Total - Discount;
+      } else {
+        Total = SubTotal;
+      }
+
+      this.billForm.patchValue({
+        subTotal: SubTotal,
+        total: Total,
+        discount: Discount
+      });
+
+    });
+  }
+
 }
 
 }

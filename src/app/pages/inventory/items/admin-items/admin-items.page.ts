@@ -4,6 +4,9 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 import { ToastController } from '@ionic/angular';
 
+import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
+import { Base64ToGallery } from '@ionic-native/base64-to-gallery/ngx';
+
 import { CategoriesModel } from 'src/app/helpers/models/categories.model';
 import { ItemsService } from 'src/app/services/items.service';
 import { CategoriesService } from 'src/app/services/categories.service';
@@ -27,13 +30,20 @@ export class AdminItemsPage implements OnInit {
   userId: string;
   stores: StoresModel[];
 
+  QrData = '';
+  scannedCode = null;
+  elementType: 'url' | 'canvas' | 'img' = 'canvas';
+  generatedCode = false;
+
   constructor( private route: ActivatedRoute,
                private router: Router,
                private formBuilder: FormBuilder,
                private itemsService: ItemsService,
                private categoriesService: CategoriesService,
                public toastController: ToastController,
-               private storesService: StoresService ) { }
+               private storesService: StoresService,
+               private barcodeScanner: BarcodeScanner,
+               private base64ToGallery: Base64ToGallery ) { }
 
   ngOnInit() {
     this.username = localStorage.getItem('user');
@@ -144,6 +154,16 @@ export class AdminItemsPage implements OnInit {
 
   cancel() {
     this.router.navigateByUrl('/tabs/items');
+  }
+
+  generateQRcode() {
+    this.generatedCode = true;
+    this.QrData = this.newItem.value.code;
+    return this.QrData;
+  }
+
+  saveQrCode() {
+    
   }
 
 }
