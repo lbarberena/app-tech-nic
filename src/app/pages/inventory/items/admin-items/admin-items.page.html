@@ -76,14 +76,17 @@
             <ion-input type="date" formControlName="createDate"></ion-input>
         </ion-item>
 
-        <ngx-qrcode *ngIf="generatedCode" [qrc-element-type]="elementType" [qrc-value]="generateQRcode()">
+        <ngx-qrcode *ngIf="generatedCode" qrc-element-type="canvas" [qrc-value]="this.newItem.value.code">
         </ngx-qrcode>
 
     </form>
 
-    <ion-button *ngIf="!generatedCode" expand="full" type="submit" (click)="generateQRcode()">
+    <ion-button color="warning" *ngIf="!generatedCode" expand="full" type="submit" (click)="generateQRcode()">
         <ion-icon name="qr-code-outline"></ion-icon>
         Generar Código QR</ion-button>
+    <ion-button color="warning" *ngIf="generatedCode" expand="full" type="submit" (click)="saveQrCode()">
+        <ion-icon name="save-outline"></ion-icon>
+        Guardar Código QR</ion-button>
     <ion-button expand="full" [disabled]="!newItem.valid" (click)="SAVE()">{{ btnName }}</ion-button>
 
 </ion-content>

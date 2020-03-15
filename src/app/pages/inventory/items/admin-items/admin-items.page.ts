@@ -32,7 +32,6 @@ export class AdminItemsPage implements OnInit {
 
   QrData = '';
   scannedCode = null;
-  elementType: 'url' | 'canvas' | 'img' = 'canvas';
   generatedCode = false;
 
   constructor( private route: ActivatedRoute,
@@ -158,12 +157,24 @@ export class AdminItemsPage implements OnInit {
 
   generateQRcode() {
     this.generatedCode = true;
-    this.QrData = this.newItem.value.code;
-    return this.QrData;
   }
 
   saveQrCode() {
-    
+    const canvas = document.querySelector('canvas') as HTMLCanvasElement;
+    const imageData = canvas.toDataURL('image/png').toString();
+
+    const data = imageData.split(',')[1];
+
+    this.base64ToGallery.base64ToGallery(data, {
+      prefix: '_img',
+      mediaScanner: true
+    }).then( async res => {
+      const TOAST = await this.toastController.create({
+        duration: 15,
+        message: 'Código QR Guardado'
+      });
+      TOAST.present();
+    });
   }
 
 }

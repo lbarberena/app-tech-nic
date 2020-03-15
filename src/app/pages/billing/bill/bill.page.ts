@@ -139,6 +139,7 @@ export class BillPage implements OnInit {
       productName.push(e.productName);
       productQuantity.push(e.quantity);
     });
+    this.emailComposer.addAlias('gmail', 'com.google.android.gm');
     const email = {
       to: `${ EmailInpunt }`,
       cc: 'octaviobarberena8@gmail.com',
@@ -153,12 +154,10 @@ export class BillPage implements OnInit {
       Nombre: ${ productName }<br><br>
       Total Factura: C$${ Total }<br><br>
       Gracias por tu compra!`,
-      isHtml: true
-    };
-    this.emailComposer.addAlias('gmail', 'com.google.android.gm');
-    this.emailComposer.open({
+      isHtml: true,
       app: 'gmail'
-    });
+    };
+    this.emailComposer.open(email);
     localStorage.removeItem('clientName');
     localStorage.removeItem('code');
     localStorage.removeItem('total');
@@ -529,15 +528,17 @@ async showData(name, quantity, price) {
 scanCode() {
   this.barcodeScanner.scan().then(
     barcodeData => {
-      this.scannedCode = barcodeData;
+      this.scannedCode = barcodeData.text;
       this.GetProductsByCode();
     }
   );
 }
 
-GetProductsByCode() {
+async GetProductsByCode() {
 
-  const data = this.scannedCode;
+  const data = {
+    code: this.scannedCode
+  };
 
   if ( data ) {
     this.itemsService.GetByCode( data ).subscribe( async res => {

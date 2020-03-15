@@ -45,8 +45,8 @@ export class ItemsService {
     );
   }
 
-  GetByCode( itemCode: string ): Observable<any> {
-    return this.http.post<GenericResponseModel>(`${this.url}/code`, itemCode, this.httpOptions )
+  GetByCode( itemCode: any ): Observable<any> {
+    return this.http.post<GenericResponseModel>(`${this.url}/code`, itemCode )
     .pipe(
       retry( 1 ),
       catchError( this.errorService.handleError )
