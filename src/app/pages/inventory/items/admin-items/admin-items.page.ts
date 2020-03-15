@@ -12,6 +12,7 @@ import { ItemsService } from 'src/app/services/items.service';
 import { CategoriesService } from 'src/app/services/categories.service';
 import { StoresModel } from 'src/app/helpers/models/stores.model';
 import { StoresService } from 'src/app/services/stores.service';
+import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
 
 @Component({
   selector: 'app-admin-items',
@@ -42,7 +43,8 @@ export class AdminItemsPage implements OnInit {
                public toastController: ToastController,
                private storesService: StoresService,
                private barcodeScanner: BarcodeScanner,
-               private base64ToGallery: Base64ToGallery ) { }
+               private base64ToGallery: Base64ToGallery,
+               private androidPermissions: AndroidPermissions ) { }
 
   ngOnInit() {
     this.username = localStorage.getItem('user');
@@ -165,15 +167,45 @@ export class AdminItemsPage implements OnInit {
 
     const data = imageData.split(',')[1];
 
-    this.base64ToGallery.base64ToGallery(data, {
-      prefix: '_img',
-      mediaScanner: true
-    }).then( async res => {
-      const TOAST = await this.toastController.create({
-        duration: 15,
-        message: 'Código QR Guardado'
+    this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE).then(
+      result => {
+        if ( result.hasPermission ) {
+          this.base64ToGallery.base64ToGallery(data, {
+            prefix: `${ this.newItem.value.name }_`,
+            mediaScanner: true
+          }).then( async res => {
+            const TOAST = await this.toastController.create({
+              duration: 15,
+              message: 'Código QR Guardado'
+            });
+            TOAST.present();
+          });
+        }
+      },
+      error => this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE).then( res => {
+        this.base64ToGallery.base64ToGallery(data, {
+          prefix: `${ this.newItem.value.name }_`,
+          mediaScanner: true
+        }).then( async res => {
+          const TOAST = await this.toastController.create({
+            duration: 15,
+            message: 'Código QR Guardado'
+          });
+          TOAST.present();
+        });
+      })
+    );
+    this.androidPermissions.requestPermissions([this.androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE]).then( res => {
+      this.base64ToGallery.base64ToGallery(data, {
+        prefix: `${ this.newItem.value.code }_`,
+        mediaScanner: true
+      }).then( async res => {
+        const TOAST = await this.toastController.create({
+          duration: 15,
+          message: 'Código QR Guardado'
+        });
+        TOAST.present();
       });
-      TOAST.present();
     });
   }
 

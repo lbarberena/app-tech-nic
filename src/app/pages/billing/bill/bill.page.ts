@@ -543,14 +543,22 @@ async GetProductsByCode() {
   if ( data ) {
     this.itemsService.GetByCode( data ).subscribe( async res => {
       this.productQuantity = res.data.quantity;
-      this.billForm.patchValue({
-        code: res.data.code,
-        productName: res.data.name,
-        price: res.data.price,
-        quantity: 1,
-        unitCost: res.data.unitCost
-      });
-      this.addProductsByCode( res.data._id, res.data.name, 1, res.data.unitCost, res.data.price, res.data.code);
+      if ( res.data.quantity > 0 ) {
+        this.billForm.patchValue({
+          code: res.data.code,
+          productName: res.data.name,
+          price: res.data.price,
+          quantity: 1,
+          unitCost: res.data.unitCost
+        });
+        this.addProducts( res.data._id, res.data.name, 1, res.data.unitCost, res.data.price, res.data.code);
+      } else {
+        const TOAST = await this.toastController.create({
+          duration: 3,
+          message: 'Producto agotado'
+        });
+        TOAST.present();
+      }
     });
   }
 }
@@ -567,15 +575,23 @@ async addProductsByCode(productId: string, name: string, Quantity: number, UnitC
 
   const QuantityTemp = this.productQuantity - Quantity;
 
-  this.itemsService.PUT(productId, {
-    quantity: QuantityTemp
-  }).subscribe( res => {
-    this.GetItems();
-  });
+  if ( QuantityTemp >= 0 ) {
+    this.itemsService.PUT(productId, {
+      quantity: QuantityTemp
+    }).subscribe( res => {
+      this.GetItems();
+    });
 
-  this.productsForm.push(this.productListForm);
-  this.products.push( this.productListForm );
-  this.check();
+    this.productsForm.push(this.productListForm);
+    this.products.push( this.productListForm );
+    this.check();
+  } else {
+    const TOAST = await this.toastController.create({
+      duration: 3,
+      message: 'Producto agotado'
+    });
+    TOAST.present();
+  }
 
 }
 

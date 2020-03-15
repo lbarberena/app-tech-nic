@@ -17,6 +17,7 @@ import { FingerprintAIO } from '@ionic-native/fingerprint-aio/ngx';
 import { OneSignal } from '@ionic-native/onesignal/ngx';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
 import { Base64ToGallery } from '@ionic-native/base64-to-gallery/ngx';
+import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
 
 import { NgxQRCodeModule } from 'ngx-qrcode2';
 
@@ -69,7 +70,8 @@ export function tokenGetterFactory() {
     FingerprintAIO,
     OneSignal,
     BarcodeScanner,
-    Base64ToGallery
+    Base64ToGallery,
+    AndroidPermissions
   ],
   bootstrap: [AppComponent]
 })
